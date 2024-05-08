@@ -1,5 +1,5 @@
 <?php
-include 'header.php';
+include '../components/header.php';
 echo "my pages page";
-include 'footer.php';
+include '../components/footer.php';
 ?>

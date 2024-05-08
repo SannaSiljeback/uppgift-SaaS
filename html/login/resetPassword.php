@@ -1,5 +1,5 @@
 <?php
-include 'header.php';
+include '../components/header.php';
 echo "reset password page";
-include 'footer.php';
+include '../componentsfooter.php';
 ?>

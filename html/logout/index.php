@@ -1,5 +1,5 @@
 <?php
-include 'header.php';
+include '../components/header.php';
 echo "logout page";
-include 'footer.php';
+include '../components/footer.php';
 ?>

@@ -1,7 +1,7 @@
 <?php
 session_start(); // ta bort
 
-include 'header.php';
+include '../components/header.php';
 echo "login page";
 
 
@@ -62,5 +62,5 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 
 <?php
-include 'footer.php';
+include '../components/footer.php';
 ?>
