@@ -1,5 +1,10 @@
 <?php
+include_once 'functions.php';
 include 'header.php';
-echo "my pages page";
+
+if (isset($_SESSION['user_id'])) {
+    echo '<a href="logout.php">Logga ut</a>';
+}
+
 include 'footer.php';
 ?>

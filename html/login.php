@@ -21,7 +21,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $_SESSION['user_id'] = $username;
         $_SESSION['user_roles'] = [$user_role];
         // Omdirigera till index eller annan sida efter inloggning
-        header("Location: index.php");
+        header("Location: myPage.php");
         exit;
     } else {
         // Om användarnamn eller lösenord är felaktigt, visa felmeddelande
