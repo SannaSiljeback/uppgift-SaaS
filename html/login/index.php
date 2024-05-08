@@ -1,5 +1,5 @@
 <?php
-session_start();
+session_start(); // ta bort
 
 include 'header.php';
 echo "login page";
