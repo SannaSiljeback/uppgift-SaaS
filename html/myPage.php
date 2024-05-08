@@ -1,5 +1,5 @@
 <?php
 include 'header.php';
-echo "my subscribers page";
+echo "my pages page";
 include 'footer.php';
 ?>

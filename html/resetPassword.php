@@ -1,5 +1,5 @@
 <?php
 include 'header.php';
-echo "my subscribers page";
+echo "reset password page";
 include 'footer.php';
 ?>

@@ -1,5 +1,5 @@
 <?php
-include './componentsheader.php';
+include 'header.php';
 echo "create account page";
-include './components/footer.php';
+include 'footer.php';
 ?>

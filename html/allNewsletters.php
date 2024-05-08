@@ -1,5 +1,5 @@
 <?php
-include './componentsheader.php';
+include 'header.php';
 echo "all newsletters page";
-include './components/footer.php';
+include 'footer.php';
 ?>

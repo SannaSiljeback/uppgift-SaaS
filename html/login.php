@@ -1,18 +1,20 @@
 <?php
-session_start(); // ta bort
 
-include '../components/header.php';
-echo "login page";
+include_once 'functions.php';
+
+include 'header.php';
 
 
 
 // Hårdkodade användaruppgifter
-$username = "anvandare";
-$password = "hemligt";
-$user_role = "medlem";
+    $username = "anvandare";
+    $password = "hemligt";
+    $user_role = "medlem";
+
 
 // Om formuläret har postats
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    
     // Kontrollera om användarnamn och lösenord matchar
     if ($_POST['username'] === $username && $_POST['password'] === $password) {
         // Sätt session för inloggad användare och roll
@@ -26,6 +28,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $error_message = "Felaktigt användarnamn eller lösenord.";
     }
 }
+
+
 ?>
 
 <!DOCTYPE html>
@@ -62,5 +66,5 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 
 <?php
-include '../components/footer.php';
+include 'footer.php';
 ?>
