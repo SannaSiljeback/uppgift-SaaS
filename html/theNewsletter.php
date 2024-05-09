@@ -2,6 +2,7 @@
 include_once 'functions.php';
 include 'header.php';
 
+
 // Om formuläret har postats
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Mailgun API-nyckel och domän
@@ -11,45 +12,155 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Mottagarens e-postadress
     $recipient = $_POST['email'] ?? '';
 
-    // Generera en slumpmässig kod
-    $random_code = generateRandomCode(6); // Generera en 6-teckens slumpmässig kod
+    // Kontrollera om e-postadressen finns i användartabellen
+    $email_exists = emailExistsInDatabase($recipient);
 
-    // E-postens ämne och meddelande
-    $subject = 'Din slumpmässiga kod';
-    $message = 'Din slumpmässiga kod är: ' . $random_code;
+    if ($email_exists) {
+        // Generera en slumpmässig kod
+        $random_code = generateRandomCode(6); // Generera en 6-teckens slumpmässig kod
 
-    // Data som ska skickas i formfält
-    $data = array(
-        'from' => 'postmaster@sandbox92fa9355d2ba47daa8646868b9080ed6.mailgun.org',
-        'to' => $recipient,
-        'subject' => $subject,
-        'text' => $message
-    );
+        // Spara den genererade koden i databasen
+        saveResetCodeToDatabase($recipient, $random_code);
 
-    // Skapa en cURL-resurs
-    $ch = curl_init();
+        // E-postens ämne och meddelande
+        $subject = 'Din slumpmässiga kod';
+        $message = 'Din slumpmässiga kod är: ' . $random_code;
 
-    // Ange cURL-alternativ
-    curl_setopt($ch, CURLOPT_URL, "https://api.mailgun.net/v3/$domain/messages");
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-    curl_setopt($ch, CURLOPT_POST, true);
-    curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($data));
-    curl_setopt($ch, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
-    curl_setopt($ch, CURLOPT_USERPWD, "api:$api_key");
+        // Data som ska skickas i formfält
+        $data = array(
+            'from' => 'postmaster@sandbox92fa9355d2ba47daa8646868b9080ed6.mailgun.org',
+            'to' => $recipient,
+            'subject' => $subject,
+            'text' => $message
+        );
 
-    // Utför cURL-anropet
-    $response = curl_exec($ch);
+        // Skapa en cURL-resurs
+        $ch = curl_init();
 
-    // Kontrollera om det uppstod några fel
-    if (curl_errno($ch)) {
-        echo 'Curl error: ' . curl_error($ch);
+        // Ange cURL-alternativ
+        curl_setopt($ch, CURLOPT_URL, "https://api.mailgun.net/v3/$domain/messages");
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_POST, true);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($data));
+        curl_setopt($ch, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
+        curl_setopt($ch, CURLOPT_USERPWD, "api:$api_key");
+
+        // Utför cURL-anropet
+        $response = curl_exec($ch);
+
+        // Kontrollera om det uppstod några fel
+        if (curl_errno($ch)) {
+            echo 'Curl error: ' . curl_error($ch);
+        } else {
+            echo 'Mail sent successfully!';
+        }
+
+        // Stäng cURL-resursen
+        curl_close($ch);
+
+
     } else {
-        echo 'Mail sent successfully!';
+        echo 'E-postadressen finns inte i användartabellen.';
+    }
+}
+
+
+// Funktion för att kontrollera om e-postadressen finns i användartabellen
+function emailExistsInDatabase($email) {
+    // Anslut till din databas
+    $mysqli = new mysqli("db", "root", "notSecureChangeMe", "uppgift2");
+
+    // Kontrollera anslutningen
+    if ($mysqli->connect_errno) {
+        echo "Failed to connect to MySQL: " . $mysqli->connect_error;
+        exit();
     }
 
-    // Stäng cURL-resursen
-    curl_close($ch);
+    // Förbered och utför en SQL-fråga för att kontrollera om e-postadressen finns i tabellen
+    $query = "SELECT COUNT(*) AS count FROM users WHERE email = ?";
+    $stmt = $mysqli->prepare($query);
+    $stmt->bind_param("s", $email);
+    $stmt->execute();
+
+    // Kontrollera om utförandet av frågan lyckades
+    if (!$stmt->execute()) {
+        echo "Execute failed: (" . $stmt->errno . ") " . $stmt->error;
+        exit();
+    }
+
+    // Hämta antalet rader som matchar e-postadressen
+    $result = $stmt->get_result();
+    $row = $result->fetch_assoc();
+    $count = $row['count'];
+
+    // Stäng anslutningen till databasen
+    $stmt->close();
+    $mysqli->close();
+
+    // Returnera true om antalet rader är större än 0, vilket innebär att e-postadressen finns i tabellen
+    return $count > 0;
 }
+
+// Funktion för att hämta användarens id från users-tabellen baserat på e-postadressen
+function getUserIdFromEmail($email) {
+    // Anslut till din databas
+    $mysqli = new mysqli("db", "root", "notSecureChangeMe", "uppgift2");
+
+    // Kontrollera anslutningen
+    if ($mysqli->connect_errno) {
+        echo "Failed to connect to MySQL: " . $mysqli->connect_error;
+        exit();
+    }
+
+    // Förbered och utför en SQL-fråga för att hämta användarens id från users-tabellen
+    $query = "SELECT id FROM users WHERE email = ?";
+    $stmt = $mysqli->prepare($query);
+    $stmt->bind_param("s", $email);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    
+    // Hämta användarens id från resultatet
+    $row = $result->fetch_assoc();
+    $user_id = $row['id'];
+
+    // Stäng anslutningen till databasen
+    $stmt->close();
+    $mysqli->close();
+
+    return $user_id;
+}
+
+// Funktion för att spara den genererade koden och användarens id i databasen
+function saveResetCodeToDatabase($email, $code) {
+    // Hämta användar-ID från users-tabellen baserat på e-postadressen
+    $user_id = getUserIdFromEmail($email);
+
+    // Anslut till din databas
+    $mysqli = new mysqli("db", "root", "notSecureChangeMe", "uppgift2");
+
+    // Kontrollera anslutningen
+    if ($mysqli->connect_errno) {
+        echo "Failed to connect to MySQL: " . $mysqli->connect_error;
+        exit();
+    }
+
+    // Förbered och utför en SQL-fråga för att spara koden och användar-ID i databasen
+    $query = "INSERT INTO resetPassword (user_id, email, code) VALUES (?, ?, ?)";
+    $stmt = $mysqli->prepare($query);
+    $stmt->bind_param("iss", $user_id, $email, $code);
+    
+    // Utför frågan
+    if (!$stmt->execute()) {
+        echo "Execute failed: (" . $stmt->errno . ") " . $stmt->error;
+        exit();
+    }
+
+    // Stäng anslutningen till databasen
+    $stmt->close();
+    $mysqli->close();
+}
+
+
 
 // Funktion för att generera en slumpmässig kod
 function generateRandomCode($length) {
