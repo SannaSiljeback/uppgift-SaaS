@@ -1,25 +1,20 @@
 <?php
 
 include_once 'functions.php';
-
 include 'header.php';
-
-
-
-// Hårdkodade användaruppgifter
-    $username = "anvandare";
-    $password = "hemligt";
-    $user_role = "medlem";
-
 
 // Om formuläret har postats
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    // Hämta användaruppgifter från formuläret
+    $username = $_POST['username'];
+    $password = $_POST['password'];
     
-    // Kontrollera om användarnamn och lösenord matchar
-    if ($_POST['username'] === $username && $_POST['password'] === $password) {
+    // Kontrollera användarens existens och lösenord i databasen
+    if (verifyLogin($username, $password)) {
         // Sätt session för inloggad användare och roll
         $_SESSION['user_id'] = $username;
-        $_SESSION['user_roles'] = [$user_role];
+        $_SESSION['user_roles'] = getUserRoles($username); // Exempel: Hämta användarroll från databasen
+        
         // Omdirigera till index eller annan sida efter inloggning
         header("Location: myPage.php");
         exit;
@@ -29,6 +24,69 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 }
 
+// Funktion för att hämta användarroller från databasen baserat på användarnamn
+function getUserRoles($username) {
+    // Anslut till databasen (anpassa anslutningsparametrarna efter din server)
+    $mysqli = new mysqli("db", "root", "notSecureChangeMe", "uppgift2");
+
+    // Kontrollera anslutningen
+    if ($mysqli->connect_errno) {
+        echo "Failed to connect to MySQL: " . $mysqli->connect_error;
+        exit();
+    }
+
+    // Förbered och utför en SQL-fråga för att hämta användarrollerna baserat på användarnamn
+    $query = "SELECT role FROM users WHERE email = ?";
+    $stmt = $mysqli->prepare($query);
+    $stmt->bind_param("s", $username);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    // Skapa en array för att lagra användarrollerna
+    $roles = array();
+
+    // Loopa igenom resultatet och lägg till varje roll i arrayen
+    while ($row = $result->fetch_assoc()) {
+        $roles[] = $row['role'];
+    }
+
+    // Stäng anslutningen till databasen
+    $stmt->close();
+    $mysqli->close();
+
+    // Returnera arrayen med användarroller
+    return $roles;
+}
+
+// Funktion för att verifiera inloggning mot databasen
+function verifyLogin($username, $password) {
+    // Anslut till databasen (anpassa anslutningsparametrarna efter din server)
+    $mysqli = new mysqli("db", "root", "notSecureChangeMe", "uppgift2");
+
+    // Kontrollera anslutningen
+    if ($mysqli->connect_errno) {
+        echo "Failed to connect to MySQL: " . $mysqli->connect_error;
+        exit();
+    }
+
+    // Förbered och utför en SQL-fråga för att kontrollera användaruppgifterna
+    $query = "SELECT * FROM users WHERE email = ? AND password = ?";
+    $stmt = $mysqli->prepare($query);
+    $stmt->bind_param("ss", $username, $password);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    // Kontrollera om det finns en matchande rad i resultatet
+    if ($result->num_rows == 1) {
+        return true; // Användaren finns och lösenordet är korrekt
+    } else {
+        return false; // Användaren finns inte eller lösenordet är felaktigt
+    }
+
+    // Stäng anslutningen till databasen
+    $stmt->close();
+    $mysqli->close();
+}
 
 ?>
 
@@ -63,7 +121,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 </body>
 </html>
-
 
 <?php
 include 'footer.php';
