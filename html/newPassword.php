@@ -11,63 +11,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $confirm_password = $_POST['confirm_password'];
 
     // Validera användarens inmatning
-    if ($new_password !== $confirm_password) {
-        $error_message = "New password and confirm password do not match.";
-    } else {
-        // Kontrollera om användarens nuvarande lösenord är korrekt
-        if (!verifyLogin($email, $current_password)) {
-            $error_message = "Current password is incorrect.";
-        } else {
-            // Uppdatera användarens lösenord i databasen
-            if (changePassword($email, $new_password)) {
-                $success_message = "Password changed successfully.";
-            } else {
-                $error_message = "Failed to change password.";
-            }
-        }
-    }
-
-    // Funktion för att kontrollera om e-postadressen finns i databasen
-function emailExists($email) {
-    // Anslut till databasen och utför en SQL-fråga för att söka efter den angivna e-postadressen
-    $mysqli = new mysqli("db", "root", "notSecureChangeMe", "uppgift2");
-
-    // Kontrollera anslutningen
-    if ($mysqli->connect_errno) {
-        echo "Failed to connect to MySQL: " . $mysqli->connect_error;
-        exit();
-    }
-
-    // Förbered och utför en SQL-fråga för att söka efter den angivna e-postadressen
-    $query = "SELECT email FROM users WHERE email = ?";
-    $stmt = $mysqli->prepare($query);
-    $stmt->bind_param("s", $email);
-    $stmt->execute();
-    $result = $stmt->get_result();
-
-    // Kontrollera om det finns en rad som matchar e-postadressen
-    if ($result->num_rows === 1) {
-        // E-postadressen finns i databasen
-        return true;
-    } else {
-        // E-postadressen finns inte i databasen
-        return false;
-    }
-
-    // Stäng anslutningen till databasen
-    $stmt->close();
-    $mysqli->close();
-}
-
-// Kontrollera om formuläret har postats
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $email = $_POST['email'];
-    $current_password = $_POST['current_password'];
-    $new_password = $_POST['new_password'];
-    $confirm_password = $_POST['confirm_password'];
-
-    // Validera användarens inmatning
-    if ($new_password !== $confirm_password) {
+    if ($new_password!== $confirm_password) {
         $error_message = "New password and confirm password do not match.";
     } else {
         // Kontrollera om användarens e-postadress finns i databasen
@@ -88,78 +32,119 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
     }
 }
-}
 
-
-
-
-
-// Funktion för att verifiera användarens inloggningsuppgifter
-function verifyLogin($email, $password) {
-    // Antag att du använder en databas för att lagra användaruppgifter
-    // Anslut till din databas
+// Funktion för att kontrollera om e-postadressen finns i databasen
+function emailExists($email) {
+    // Anslut till databasen och utför en SQL-fråga för att söka efter den angivna e-postadressen
     $mysqli = new mysqli("db", "root", "notSecureChangeMe", "uppgift2");
 
     // Kontrollera anslutningen
-    if ($mysqli->connect_errno) {
-        echo "Failed to connect to MySQL: " . $mysqli->connect_error;
-        exit();
+    if ($mysqli->connect_error) {
+        error_log("Connection failed: ". $mysqli->connect_error);
+        return false;
     }
 
-    // Förbered och utför en SQL-fråga för att hämta användarens lösenord baserat på e-postadressen
-    $query = "SELECT password FROM users WHERE email = ?";
+    $query = "SELECT email FROM users WHERE email =?";
     $stmt = $mysqli->prepare($query);
     $stmt->bind_param("s", $email);
     $stmt->execute();
     $result = $stmt->get_result();
 
-    // Kontrollera om det finns en rad som matchar e-postadressen
     if ($result->num_rows === 1) {
-        $row = $result->fetch_assoc();
-        $stored_password = $row['password'];
-
-        // Jämför det lagrade lösenordet med det angivna lösenordet
-        if (password_verify($password, $stored_password)) {
-            // Lösenordet är korrekt
-            return true;
-        }
+        return true;
+    } else {
+        return false;
     }
 
-    // Stäng anslutningen till databasen
     $stmt->close();
     $mysqli->close();
+}
 
-    // Om ingen matchning hittades eller lösenordet är felaktigt, returnera false
-    return false;
+// Funktion för att verifiera användarens inloggningsuppgifter
+function verifyLogin($email, $password) {
+    try {
+        $mysqli = new mysqli("db", "root", "notSecureChangeMe", "uppgift2");
+        if ($mysqli->connect_error) {
+            throw new Exception("Connection failed: ". $mysqli->connect_error);
+        }
+
+        $query = "SELECT password FROM users WHERE email =?";
+        $stmt = $mysqli->prepare($query);
+        if (!$stmt) {
+            throw new Exception("Prepare failed: ". $mysqli->error);
+        }
+
+        $stmt->bind_param("s", $email);
+        if (!$stmt->execute()) {
+            throw new Exception("Execute failed: ". $stmt->error);
+        }
+
+        $result = $stmt->get_result();
+        if ($result->num_rows === 1) {
+            $row = $result->fetch_assoc();
+            $stored_password = $row['password'];
+
+            if ($password === $stored_password) {
+                return true;
+            }
+        }
+
+        $stmt->close();
+        $mysqli->close();
+    } catch (Exception $e) {
+        error_log("An error occurred: ". $e->getMessage());
+        return false;
+    }
 }
 
 // Funktion för att ändra användarens lösenord
 function changePassword($email, $newPassword) {
-    // Antag att du använder en databas för att lagra användaruppgifter
-    // Anslut till din databas
     $mysqli = new mysqli("db", "root", "notSecureChangeMe", "uppgift2");
 
-    // Kontrollera anslutningen
-    if ($mysqli->connect_errno) {
-        echo "Failed to connect to MySQL: " . $mysqli->connect_error;
-        exit();
+    if ($mysqli->connect_error) {
+        die("Connection failed: ". $mysqli->connect_error);
     }
 
-    // Kryptera det nya lösenordet innan det sparas i databasen
-    $hashed_password = password_hash($newPassword, PASSWORD_DEFAULT);
-
-    // Förbered och utför en SQL-fråga för att uppdatera användarens lösenord baserat på e-postadressen
-    $query = "UPDATE users SET password = ? WHERE email = ?";
+    $query = "UPDATE users SET password =? WHERE email =?";
     $stmt = $mysqli->prepare($query);
-    $stmt->bind_param("ss", $hashed_password, $email);
-    $success = $stmt->execute();
 
-    // Stäng anslutningen till databasen
+    $stmt->bind_param("ss", $newPassword, $email);
+
+    $result = $stmt->execute();
+
     $stmt->close();
     $mysqli->close();
 
-    // Returnera true om lösenordet ändrades framgångsrikt, annars false
-    return $success;
+    return $result;
+}
+
+// Funktion för att kontrollera om koden stämmer med tabellen resetPassword
+function verifyCode($code) {
+    // Anslut till databasen
+    $mysqli = new mysqli("db", "root", "notSecureChangeMe", "uppgift2");
+
+    // Kontrollera anslutningen
+    if ($mysqli->connect_error) {
+        error_log("Connection failed: ". $mysqli->connect_error);
+        return false;
+    }
+
+    // Förbered en SQL-fråga för att hämta koden från tabellen resetPassword
+    $query = "SELECT code FROM resetPassword WHERE code = ?";
+    $stmt = $mysqli->prepare($query);
+    $stmt->bind_param("s", $code);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    // Om det finns en matchande kod i tabellen, returnera true, annars false
+    if ($result->num_rows === 1) {
+        return true;
+    } else {
+        return false;
+    }
+
+    $stmt->close();
+    $mysqli->close();
 }
 
 ?>
