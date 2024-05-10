@@ -10,10 +10,12 @@ $success_message = '';
 
 // Kontrollera om formuläret har postats
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    // Hämta inmatade värden från formuläret
     $email = $_POST['email'];
     $password = $_POST['password'];
-    $firstName = $_POST['firstName']; // Lägg till detta för att hämta förnamn från formuläret
-    $lastName = $_POST['lastName']; // Lägg till detta för att hämta efternamn från formuläret
+    $firstName = $_POST['firstName'];
+    $lastName = $_POST['lastName'];
+    $role = $_POST['role']; // Hämta rollen från formuläret
 
     // Validera användarens inmatning (lägg till din egen validering om nödvändigt)
     if (empty($email) || empty($password) || empty($firstName) || empty($lastName)) {
@@ -23,11 +25,21 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         if (emailExists($email)) {
             $error_message = "Email already exists.";
         } else {
-            // Skapa den nya användaren
-            if (createUser($email, $password, $firstName, $lastName)) {
-                $success_message = "User created successfully.";
+            // Skapa den nya användaren beroende på rollen
+            if ($role === 'customer') {
+                if (createCustomer($email, $password, $firstName, $lastName)) {
+                    $success_message = "Customer created successfully.";
+                } else {
+                    $error_message = "Failed to create customer.";
+                }
+            } elseif ($role === 'subscriber') {
+                if (createSubscriber($email, $password, $firstName, $lastName)) {
+                    $success_message = "Subscriber created successfully.";
+                } else {
+                    $error_message = "Failed to create subscriber.";
+                }
             } else {
-                $error_message = "Failed to create user.";
+                $error_message = "Invalid role.";
             }
         }
     }
@@ -67,8 +79,8 @@ function emailExists($email) {
 }
 
 
-// Funktion för att skapa en ny användare
-function createUser($email, $password, $firstName, $lastName) {
+// Funktion för att skapa en ny kund
+function createCustomer($email, $password, $firstName, $lastName) {
     // Anslut till databasen
     $mysqli = new mysqli("db", "root", "notSecureChangeMe", "uppgift2");
 
@@ -77,7 +89,38 @@ function createUser($email, $password, $firstName, $lastName) {
         die("Connection failed: " . $mysqli->connect_error);
     }
 
-    // Förbered en SQL-fråga för att lägga till en ny användare
+    // Förbered en SQL-fråga för att lägga till en ny kund
+    $query = "INSERT INTO users (email, password, firstName, lastName) VALUES (?, ?, ?, ?)";
+    $stmt = $mysqli->prepare($query);
+
+    // Om förberedelsen misslyckas, avsluta med ett felmeddelande
+    if (!$stmt) {
+        die("Prepare failed: " . $mysqli->error);
+    }
+
+    // Binda parametrarna och utför SQL-frågan
+    $stmt->bind_param("ssss", $email, $password, $firstName, $lastName);
+    $result = $stmt->execute();
+
+    // Stäng anslutningen och returnera resultatet av SQL-frågan
+    $stmt->close();
+    $mysqli->close();
+
+    return $result;
+}
+
+
+//skapa subscriber
+function createSubscriber($email, $password, $firstName, $lastName) {
+    // Anslut till databasen
+    $mysqli = connectToDatabase();
+
+    // Kontrollera anslutningen
+    if ($mysqli->connect_error) {
+        die("Connection failed: " . $mysqli->connect_error);
+    }
+
+    // Förbered en SQL-fråga för att lägga till en ny prenumerant
     $query = "INSERT INTO users (email, password, firstName, lastName) VALUES (?, ?, ?, ?)";
     $stmt = $mysqli->prepare($query);
 
@@ -130,6 +173,13 @@ function createUser($email, $password, $firstName, $lastName) {
         <div>
              <label for="lastName">Last Name:</label>
          <input type="text" id="lastName" name="lastName" required>
+        </div>
+        <div>
+            <label for="role">Role:</label>
+            <select id="role" name="role">
+                <option value="customer">Customer</option>
+                <option value="subscriber">Subscriber</option>
+            </select>
         </div>
         <div>
             <button type="submit">Create User</button>
