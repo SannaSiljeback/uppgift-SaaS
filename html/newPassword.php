@@ -9,9 +9,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $current_password = $_POST['current_password'];
     $new_password = $_POST['new_password'];
     $confirm_password = $_POST['confirm_password'];
+    $verification_code = $_POST['verification_code'];
 
     // Validera användarens inmatning
-    if ($new_password!== $confirm_password) {
+    if ($new_password !== $confirm_password) {
         $error_message = "New password and confirm password do not match.";
     } else {
         // Kontrollera om användarens e-postadress finns i databasen
@@ -22,11 +23,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             if (!verifyLogin($email, $current_password)) {
                 $error_message = "Current password is incorrect.";
             } else {
-                // Uppdatera användarens lösenord i databasen
-                if (changePassword($email, $new_password)) {
-                    $success_message = "Password changed successfully.";
+                // Kontrollera om koden stämmer överens med tabellen resetPassword
+                if (!verifyCode($verification_code, $email)) {
+                    $error_message = "Invalid verification code.";
                 } else {
-                    $error_message = "Failed to change password.";
+                    // Uppdatera användarens lösenord i databasen
+                    if (changePassword($email, $new_password)) {
+                        $success_message = "Password changed successfully.";
+                    } else {
+                        $error_message = "Failed to change password.";
+                    }
                 }
             }
         }
@@ -119,20 +125,20 @@ function changePassword($email, $newPassword) {
 }
 
 // Funktion för att kontrollera om koden stämmer med tabellen resetPassword
-function verifyCode($code) {
+function verifyCode($verification_code, $email) {
     // Anslut till databasen
     $mysqli = new mysqli("db", "root", "notSecureChangeMe", "uppgift2");
 
     // Kontrollera anslutningen
     if ($mysqli->connect_error) {
-        error_log("Connection failed: ". $mysqli->connect_error);
+        error_log("Connection failed: " . $mysqli->connect_error);
         return false;
     }
 
     // Förbered en SQL-fråga för att hämta koden från tabellen resetPassword
-    $query = "SELECT code FROM resetPassword WHERE code = ?";
+    $query = "SELECT code FROM resetPassword WHERE code = ? AND email = ?";
     $stmt = $mysqli->prepare($query);
-    $stmt->bind_param("s", $code);
+    $stmt->bind_param("ss", $verification_code, $email);
     $stmt->execute();
     $result = $stmt->get_result();
 
@@ -146,6 +152,7 @@ function verifyCode($code) {
     $stmt->close();
     $mysqli->close();
 }
+
 
 ?>
 
@@ -181,6 +188,10 @@ function verifyCode($code) {
         <div>
             <label for="confirm_password">Confirm Password:</label>
             <input type="password" id="confirm_password" name="confirm_password" required>
+        </div>
+        <div>
+            <label for="verification_code">Verification Code:</label>
+            <input type="text" id="verification_code" name="verification_code" required>
         </div>
         <div>
             <button type="submit">Change Password</button>
