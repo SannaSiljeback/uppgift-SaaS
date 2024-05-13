@@ -1,7 +1,7 @@
 <?php
 include 'header.php';
 
-// 1. Anslut till databasen
+// Anslut till databasen
 $mysqli = new mysqli("db", "root", "notSecureChangeMe", "uppgift2");
 
 // Kontrollera anslutningen
@@ -10,11 +10,11 @@ if ($mysqli->connect_errno) {
     exit();
 }
 
-// 2. Hämta data från databasen
+// Hämta data från databasen
 $query = "SELECT * FROM newsletters";
 $result = $mysqli->query($query);
 
-// 3. Bearbeta och visa data
+// Bearbeta och visa data
 echo "<h2>Alla nyhetsbrev</h2>";
 echo "<ul>";
 while ($row = $result->fetch_assoc()) {

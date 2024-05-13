@@ -1,5 +1,4 @@
 <?php
-
 include_once 'functions.php';
 include 'header.php';
 
@@ -14,14 +13,23 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         // Sätt session för inloggad användare och roll
         $_SESSION['user_id'] = $username;
         $_SESSION['user_roles'] = getUserRoles($username); // Exempel: Hämta användarroll från databasen
-        
+
         // Omdirigera till index eller annan sida efter inloggning
-        header("Location: myPage.php");
+        header("Location: theNewsletter.php");
         exit;
     } else {
         // Om användarnamn eller lösenord är felaktigt, visa felmeddelande
         $error_message = "Felaktigt användarnamn eller lösenord.";
     }
+}
+
+// Placera kodsnutten för att kontrollera sessionsvariabler här
+if (session_status() === PHP_SESSION_ACTIVE) {
+    echo "<pre>";
+    var_dump($_SESSION);
+    echo "</pre>";
+} else {
+    echo "Sessionen är inte igång.";
 }
 
 // Funktion för att hämta användarroller från databasen baserat på användarnamn

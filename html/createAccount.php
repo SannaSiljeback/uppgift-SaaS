@@ -29,7 +29,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             if ($role === 'customer' || $role === 'subscriber') {
                 if (createUser($email, $password, $firstName, $lastName, $role)) {
                     $success_message = ucfirst($role) . " created successfully.";
-                    
+
                     // Om användaren är en prenumerant, lägg till i nyhetsbrevstabellen
                     if ($role === 'subscriber') {
                         if (subscribeToNewsletter($email)) {
@@ -49,17 +49,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 }
 
 // Anslutningsfunktion för att ansluta till databasen
-function connectToDatabase() {
-    $mysqli = new mysqli("db", "root", "notSecureChangeMe", "uppgift2");
-    if ($mysqli->connect_error) {
-        error_log("Connection failed: " . $mysqli->connect_error);
-        return false;
-    }
-    return $mysqli;
-}
+// function connectToDatabase()
+// {
+//     $mysqli = new mysqli("db", "root", "notSecureChangeMe", "uppgift2");
+//     if ($mysqli->connect_error) {
+//         error_log("Connection failed: " . $mysqli->connect_error);
+//         return false;
+//     }
+//     return $mysqli;
+// }
 
 // Funktion för att kontrollera om e-postadressen finns i databasen
-function emailExists($email) {
+function emailExists($email)
+{
     $mysqli = connectToDatabase();
     if (!$mysqli) {
         return false; // Hantera felaktig anslutning till databasen
@@ -82,7 +84,8 @@ function emailExists($email) {
 }
 
 // Funktion för att skapa en ny användare
-function createUser($email, $password, $firstName, $lastName, $role) {
+function createUser($email, $password, $firstName, $lastName, $role)
+{
     // Anslut till databasen
     $mysqli = connectToDatabase();
 
@@ -124,7 +127,8 @@ function createUser($email, $password, $firstName, $lastName, $role) {
 }
 
 // Funktion för att lägga till användare i nyhetsbrevstabellen som en ägare
-function subscribeToNewsletter($email) {
+function subscribeToNewsletter($email)
+{
     // Anslut till databasen
     $mysqli = connectToDatabase();
 
@@ -153,7 +157,7 @@ function subscribeToNewsletter($email) {
     // Stäng anslutningen och returnera resultatet av SQL-frågan
     $stmt->close();
     $mysqli->close();
-
+    
     return $result;
 }
 
@@ -161,17 +165,19 @@ function subscribeToNewsletter($email) {
 ?>
 
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Create User</title>
 </head>
+
 <body>
     <h2>Create User</h2>
-    <?php if(isset($error_message)) { ?>
+    <?php if (isset($error_message)) { ?>
         <p style="color: red;"><?php echo $error_message; ?></p>
     <?php } ?>
-    <?php if(isset($success_message)) { ?>
+    <?php if (isset($success_message)) { ?>
         <p style="color: green;"><?php echo $success_message; ?></p>
     <?php } ?>
     <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
@@ -188,8 +194,8 @@ function subscribeToNewsletter($email) {
             <input type="text" id="firstName" name="firstName" required>
         </div>
         <div>
-             <label for="lastName">Last Name:</label>
-         <input type="text" id="lastName" name="lastName" required>
+            <label for="lastName">Last Name:</label>
+            <input type="text" id="lastName" name="lastName" required>
         </div>
         <div>
             <label for="role">Role:</label>
@@ -203,6 +209,7 @@ function subscribeToNewsletter($email) {
         </div>
     </form>
 </body>
+
 </html>
 
 <?php include 'footer.php'; ?>
