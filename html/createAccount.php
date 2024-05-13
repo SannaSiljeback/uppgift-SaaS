@@ -29,6 +29,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             if ($role === 'customer' || $role === 'subscriber') {
                 if (createUser($email, $password, $firstName, $lastName, $role)) {
                     $success_message = ucfirst($role) . " created successfully.";
+                    
+                    // Om användaren är en prenumerant, lägg till i nyhetsbrevstabellen
+                    if ($role === 'subscriber') {
+                        if (subscribeToNewsletter($email)) {
+                            $success_message .= " Subscribed to newsletter.";
+                        } else {
+                            $error_message .= " Failed to subscribe to newsletter.";
+                        }
+                    }
                 } else {
                     $error_message = "Failed to create " . $role . ".";
                 }
@@ -72,7 +81,7 @@ function emailExists($email) {
     $mysqli->close();
 }
 
-// Funktion för att skapa en ny kund eller prenumerant
+// Funktion för att skapa en ny användare
 function createUser($email, $password, $firstName, $lastName, $role) {
     // Anslut till databasen
     $mysqli = connectToDatabase();
@@ -93,6 +102,52 @@ function createUser($email, $password, $firstName, $lastName, $role) {
 
     // Binda parametrarna och utför SQL-frågan
     $stmt->bind_param("sssss", $email, $password, $firstName, $lastName, $role);
+    $result = $stmt->execute();
+
+    // Om användaren är en kund, lägg till i nyhetsbrevstabellen som ägare
+    if ($result && $role === 'customer') {
+        if (subscribeToNewsletter($email, $firstName, $lastName)) {
+            // Om det lyckas, returnera true
+            return true;
+        } else {
+            // Om det misslyckas, ta bort användaren och returnera false
+            // deleteUser($email);
+            return false;
+        }
+    }
+
+    // Stäng anslutningen och returnera resultatet av SQL-frågan
+    $stmt->close();
+    $mysqli->close();
+
+    return $result;
+}
+
+// Funktion för att lägga till användare i nyhetsbrevstabellen som en ägare
+function subscribeToNewsletter($email) {
+    // Anslut till databasen
+    $mysqli = connectToDatabase();
+
+    // Kontrollera anslutningen
+    if ($mysqli->connect_error) {
+        die("Connection failed: " . $mysqli->connect_error);
+    }
+
+    // Förbered en SQL-fråga för att lägga till användaren i nyhetsbrevstabellen
+    $query = "INSERT INTO newsletters (title, description, owner) VALUES (?, ?, ?)";
+    $stmt = $mysqli->prepare($query);
+
+    // Om förberedelsen misslyckas, avsluta med ett felmeddelande
+    if (!$stmt) {
+        die("Prepare failed: " . $mysqli->error);
+    }
+
+    // Definiera standardvärden för titel och beskrivning för nyhetsbrevet
+    $title = "Weekly Newsletter";
+    $description = "Welcome to our weekly newsletter!";
+
+    // Binda parametrarna och utför SQL-frågan
+    $stmt->bind_param("sss", $title, $description, $email);
     $result = $stmt->execute();
 
     // Stäng anslutningen och returnera resultatet av SQL-frågan
