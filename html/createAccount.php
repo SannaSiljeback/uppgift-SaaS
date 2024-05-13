@@ -26,17 +26,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $error_message = "Email already exists.";
         } else {
             // Skapa den nya användaren beroende på rollen
-            if ($role === 'customer') {
-                if (createCustomer($email, $password, $firstName, $lastName)) {
-                    $success_message = "Customer created successfully.";
+            if ($role === 'customer' || $role === 'subscriber') {
+                if (createUser($email, $password, $firstName, $lastName, $role)) {
+                    $success_message = ucfirst($role) . " created successfully.";
                 } else {
-                    $error_message = "Failed to create customer.";
-                }
-            } elseif ($role === 'subscriber') {
-                if (createSubscriber($email, $password, $firstName, $lastName)) {
-                    $success_message = "Subscriber created successfully.";
-                } else {
-                    $error_message = "Failed to create subscriber.";
+                    $error_message = "Failed to create " . $role . ".";
                 }
             } else {
                 $error_message = "Invalid role.";
@@ -78,40 +72,8 @@ function emailExists($email) {
     $mysqli->close();
 }
 
-
-// Funktion för att skapa en ny kund
-function createCustomer($email, $password, $firstName, $lastName) {
-    // Anslut till databasen
-    $mysqli = new mysqli("db", "root", "notSecureChangeMe", "uppgift2");
-
-    // Kontrollera anslutningen
-    if ($mysqli->connect_error) {
-        die("Connection failed: " . $mysqli->connect_error);
-    }
-
-    // Förbered en SQL-fråga för att lägga till en ny kund
-    $query = "INSERT INTO users (email, password, firstName, lastName) VALUES (?, ?, ?, ?)";
-    $stmt = $mysqli->prepare($query);
-
-    // Om förberedelsen misslyckas, avsluta med ett felmeddelande
-    if (!$stmt) {
-        die("Prepare failed: " . $mysqli->error);
-    }
-
-    // Binda parametrarna och utför SQL-frågan
-    $stmt->bind_param("ssss", $email, $password, $firstName, $lastName);
-    $result = $stmt->execute();
-
-    // Stäng anslutningen och returnera resultatet av SQL-frågan
-    $stmt->close();
-    $mysqli->close();
-
-    return $result;
-}
-
-
-//skapa subscriber
-function createSubscriber($email, $password, $firstName, $lastName) {
+// Funktion för att skapa en ny kund eller prenumerant
+function createUser($email, $password, $firstName, $lastName, $role) {
     // Anslut till databasen
     $mysqli = connectToDatabase();
 
@@ -120,8 +82,8 @@ function createSubscriber($email, $password, $firstName, $lastName) {
         die("Connection failed: " . $mysqli->connect_error);
     }
 
-    // Förbered en SQL-fråga för att lägga till en ny prenumerant
-    $query = "INSERT INTO users (email, password, firstName, lastName) VALUES (?, ?, ?, ?)";
+    // Förbered en SQL-fråga för att lägga till en ny användare
+    $query = "INSERT INTO users (email, password, firstName, lastName, role) VALUES (?, ?, ?, ?, ?)";
     $stmt = $mysqli->prepare($query);
 
     // Om förberedelsen misslyckas, avsluta med ett felmeddelande
@@ -130,7 +92,7 @@ function createSubscriber($email, $password, $firstName, $lastName) {
     }
 
     // Binda parametrarna och utför SQL-frågan
-    $stmt->bind_param("ssss", $email, $password, $firstName, $lastName);
+    $stmt->bind_param("sssss", $email, $password, $firstName, $lastName, $role);
     $result = $stmt->execute();
 
     // Stäng anslutningen och returnera resultatet av SQL-frågan
