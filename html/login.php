@@ -9,10 +9,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $password = $_POST['password'];
     
     // Kontrollera användarens existens och lösenord i databasen
-    if (verifyLogin($username, $password)) {
+    $userId = verifyLogin($username, $password);
+    if ($userId) {
         // Sätt session för inloggad användare och roll
-        $_SESSION['user_id'] = $username;
-        $_SESSION['user_roles'] = getUserRoles($username); // Exempel: Hämta användarroll från databasen
+        $_SESSION['user_id'] = $userId;
+        $_SESSION['user_roles'] = getUserRoles($userId); // Exempel: Hämta användarroll från databasen
 
         // Omdirigera till index eller annan sida efter inloggning
         header("Location: theNewsletter.php");
@@ -33,7 +34,7 @@ if (session_status() === PHP_SESSION_ACTIVE) {
 }
 
 // Funktion för att hämta användarroller från databasen baserat på användarnamn
-function getUserRoles($username) {
+function getUserRoles($userId) {
     // Anslut till databasen (anpassa anslutningsparametrarna efter din server)
     $mysqli = new mysqli("db", "root", "notSecureChangeMe", "uppgift2");
 
@@ -44,9 +45,9 @@ function getUserRoles($username) {
     }
 
     // Förbered och utför en SQL-fråga för att hämta användarrollerna baserat på användarnamn
-    $query = "SELECT role FROM users WHERE email = ?";
+    $query = "SELECT role FROM users WHERE id = ?";
     $stmt = $mysqli->prepare($query);
-    $stmt->bind_param("s", $username);
+    $stmt->bind_param("i", $userId);
     $stmt->execute();
     $result = $stmt->get_result();
 
@@ -86,7 +87,8 @@ function verifyLogin($username, $password) {
 
     // Kontrollera om det finns en matchande rad i resultatet
     if ($result->num_rows == 1) {
-        return true; // Användaren finns och lösenordet är korrekt
+        $user = $result->fetch_assoc();
+        return $user['id']; // Returnera användarens id
     } else {
         return false; // Användaren finns inte eller lösenordet är felaktigt
     }

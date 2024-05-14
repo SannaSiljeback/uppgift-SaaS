@@ -17,6 +17,18 @@ if (session_status() === PHP_SESSION_ACTIVE) {
 // Hämta alla tillgängliga nyhetsbrev från databasen
 $newsletters = getAllNewsletters();
 
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    if (isset($_SESSION['user_id'])) {
+        $action = $_POST['action'];
+        $newsletter_id = $_POST['newsletter_id'];
+        $user_id = $_SESSION['user_id']; // Antag att du har lagt till användarens ID i sessionen vid inloggning
+
+        handleSubscription($user_id, $newsletter_id, $action);
+    } else {
+        echo "Användaren är inte inloggad.";
+    }
+}
+
 
 // Visa alla nyhetsbrev med knappar bredvid dem
 echo "<ul>";
@@ -89,42 +101,6 @@ function getAllNewsletters()
     return $newsletters;
 }
 
-// // Funktion för att hämta nyhetsbrev baserat på id
-// function getNewsletterById($newsletter_id) {
-//     // Anslut till databasen
-//     $mysqli = connectToDatabase();
-
-//     // Kontrollera anslutningen
-//     if ($mysqli->connect_error) {
-//         die("Connection failed: " . $mysqli->connect_error);
-//     }
-
-//     // Förbered en SQL-fråga för att hämta nyhetsbrevet med det angivna id
-//     $query = "SELECT id, title, description FROM newsletters WHERE id = ?";
-//     $stmt = $mysqli->prepare($query);
-
-//     // Om förberedelsen misslyckas, avsluta med ett felmeddelande
-//     if (!$stmt) {
-//         die("Prepare failed: " . $mysqli->error);
-//     }
-
-//     // Binda parametern och utför SQL-frågan
-//     $stmt->bind_param("i", $newsletter_id);
-//     $stmt->execute();
-//     $result = $stmt->get_result();
-
-//     // Hämta raden från resultatet om det finns någon
-//     if ($result->num_rows == 1) {
-//         $newsletter = $result->fetch_assoc();
-//         return $newsletter;
-//     } else {
-//         return null; // Om nyhetsbrevet inte hittas, returnera null
-//     }
-
-//     // Stäng anslutningen och frigör resurser
-//     $stmt->close();
-//     $mysqli->close();
-// }
 
 // Funktion för att kontrollera om användaren är prenumerant
 function checkSubscriberStatus($user_id, $newsletter_id)
@@ -163,8 +139,88 @@ function checkSubscriberStatus($user_id, $newsletter_id)
     $mysqli->close();
 }
 
-?>
 
+function handleSubscription($user_id, $newsletter_id, $action)
+{
+    // Anslut till databasen
+    $mysqli = connectToDatabase();
+
+    // Kontrollera anslutningen
+    if ($mysqli->connect_error) {
+        die("Connection failed: ". $mysqli->connect_error);
+    }
+
+    // Kontrollera om användaren finns i users-tabellen
+    if (userExists($mysqli, $user_id)) {
+        // Förbered en SQL-fråga för att lägga till eller ta bort prenumeration
+        if ($action == "subscribe") {
+            $query = "INSERT INTO subscriptions (user_id, newsletter_id) VALUES (?,?)";
+        } else { // action == "unsubscribe"
+            $query = "DELETE FROM subscriptions WHERE user_id =? AND newsletter_id =?";
+        }
+
+        // Förbered SQL-frågan
+        $stmt = $mysqli->prepare($query);
+
+        // Om förberedelsen misslyckas, avsluta med ett felmeddelande
+        if (!$stmt) {
+            die("Prepare failed: ". $mysqli->error);
+        }
+
+        // Binda parametrarna och utför SQL-frågan
+        $stmt->bind_param("ii", $user_id, $newsletter_id);
+        $stmt->execute();
+
+        // Stäng anslutningen och frigör resurser
+        $stmt->close();
+    } else {
+        echo "Användaren finns inte i users-tabellen.";
+    }
+
+    $mysqli->close();
+}
+
+function userExists($mysqli, $user_id)
+{
+    echo "User ID: " . $user_id . "<br>";
+    
+    // Förbered en SQL-fråga för att kontrollera om användaren finns
+    $query = "SELECT id FROM users WHERE id = ?";
+    $stmt = $mysqli->prepare($query);
+
+    // Om förberedelsen misslyckas, skriv ut felmeddelandet och avsluta
+    if (!$stmt) {
+        die("Prepare failed: ". $mysqli->error);
+    }
+
+    // Binda parametrarna och utför SQL-frågan
+    $stmt->bind_param("i", $user_id);
+    if (!$stmt->execute()) {
+        die("Query execution failed: ". $stmt->error);
+    }
+
+    $result = $stmt->get_result();
+
+    // Skriv ut SQL-frågan och dess resultat
+    echo "SQL query: " . $query . "<br>";
+    echo "Result: " . var_dump($result->fetch_assoc()) . "<br>";
+
+    // Returnera true om användaren finns, annars false
+    if ($result->num_rows > 0) {
+        return true;
+    } else {
+        return false;
+    }
+
+    // Stäng frågestället
+    $stmt->close();
+}
+
+
+
+
+
+?>
 
 
 
