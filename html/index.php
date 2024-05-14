@@ -4,7 +4,6 @@ include 'header.php';
 ?>
 
 <!-- Visa alla nyhetsbrev -->
-<h2>Alla nyhetsbrev</h2>
 <?php include 'allNewsletters.php'; ?>
 
 <!-- Knapp för att logga in -->
