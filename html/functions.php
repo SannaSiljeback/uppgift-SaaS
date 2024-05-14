@@ -11,9 +11,11 @@ function user_has_role($role)
     }
 }
 
+
 function is_signed_in()
 {
-    if (isset($_SESSION['is_signed_in']) && $_SESSION['is_signed_in']) {
+    
+    if (isset($_SESSION['user_id']) && $_SESSION['user_id']) {
         return true;
     } else {
         return false;

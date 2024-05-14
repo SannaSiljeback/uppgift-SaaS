@@ -59,20 +59,6 @@ foreach ($newsletters as $newsletter) {
 echo "</ul>";
 
 
-
-
-
-
-
-// function connectToDatabase() {
-//     $mysqli = new mysqli("db", "root", "notSecureChangeMe", "uppgift2");
-//     if ($mysqli->connect_error) {
-//         error_log("Connection failed: " . $mysqli->connect_error);
-//         return false;
-//     }
-//     return $mysqli;
-// }
-
 // Funktion för att hämta alla nyhetsbrev från databasen
 function getAllNewsletters()
 {
