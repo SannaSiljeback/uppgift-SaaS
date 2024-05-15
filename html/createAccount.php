@@ -48,17 +48,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 }
 
-// Anslutningsfunktion för att ansluta till databasen
-// function connectToDatabase()
-// {
-//     $mysqli = new mysqli("db", "root", "notSecureChangeMe", "uppgift2");
-//     if ($mysqli->connect_error) {
-//         error_log("Connection failed: " . $mysqli->connect_error);
-//         return false;
-//     }
-//     return $mysqli;
-// }
-
 // Funktion för att kontrollera om e-postadressen finns i databasen
 function emailExists($email)
 {
@@ -147,8 +136,8 @@ function subscribeToNewsletter($email)
     }
 
     // Definiera standardvärden för titel och beskrivning för nyhetsbrevet
-    $title = "Weekly Newsletter";
-    $description = "Welcome to our weekly newsletter!";
+    $title = "";
+    $description = "";
 
     // Binda parametrarna och utför SQL-frågan
     $stmt->bind_param("sss", $title, $description, $email);

@@ -8,16 +8,20 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Hämta användaruppgifter från formuläret
     $username = $_POST['username'];
     $password = $_POST['password'];
-    
-    // Kontrollera användarens existens och lösenord i databasen
-    $userId = verifyLogin($username, $password);
-    if ($userId) {
-        // Sätt session för inloggad användare och roll
-        $_SESSION['user_id'] = $userId;
-        $_SESSION['user_roles'] = getUserRoles($userId); // Exempel: Hämta användarroll från databasen
 
-        // Omdirigera till index eller annan sida efter inloggning
-        header("Location: theNewsletter.php");
+    // Kontrollera användarens existens och lösenord i databasen
+    $user = verifyLogin($username, $password);
+    if ($user) {
+        // Sätt session för inloggad användare och roll
+        $_SESSION['user_id'] = $user['id'];
+        $_SESSION['user_role'] = $user['role']; // Sätt användarens roll i sessionen
+
+        // Omdirigera till olika sidor baserat på användarens roll
+        if ($_SESSION['user_role'] == 'subscriber') {
+            header("Location: theNewsletter.php");
+        } else if ($_SESSION['user_role'] == 'customer') {
+            header("Location: subscribers.php");
+        }
         exit;
     } else {
         // Om användarnamn eller lösenord är felaktigt, visa felmeddelande
@@ -35,7 +39,8 @@ if (session_status() === PHP_SESSION_ACTIVE) {
 }
 
 // Funktion för att hämta användarroller från databasen baserat på användarnamn
-function getUserRoles($userId) {
+function getUserRoles($userId)
+{
     // Anslut till databasen (anpassa anslutningsparametrarna efter din server)
     $mysqli = new mysqli("db", "root", "notSecureChangeMe", "uppgift2");
 
@@ -69,7 +74,8 @@ function getUserRoles($userId) {
 }
 
 // Funktion för att verifiera inloggning mot databasen
-function verifyLogin($username, $password) {
+function verifyLogin($username, $password)
+{
     // Anslut till databasen (anpassa anslutningsparametrarna efter din server)
     $mysqli = new mysqli("db", "root", "notSecureChangeMe", "uppgift2");
 
@@ -89,7 +95,7 @@ function verifyLogin($username, $password) {
     // Kontrollera om det finns en matchande rad i resultatet
     if ($result->num_rows == 1) {
         $user = $result->fetch_assoc();
-        return $user['id']; // Returnera användarens id
+        return array('id' => $user['id'], 'role' => $user['role']); // Returnera användarens id och roll
     } else {
         return false; // Användaren finns inte eller lösenordet är felaktigt
     }
@@ -103,34 +109,37 @@ function verifyLogin($username, $password) {
 
 <!DOCTYPE html>
 <html lang="sv">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Inloggning</title>
 </head>
+
 <body>
 
-<h2>Inloggning</h2>
+    <h2>Inloggning</h2>
 
-<?php if(isset($error_message)) { ?>
-    <p style="color: red;"><?php echo $error_message; ?></p>
-<?php } ?>
+    <?php if (isset($error_message)) { ?>
+        <p style="color: red;"><?php echo $error_message; ?></p>
+    <?php } ?>
 
-<form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
-    <div>
-        <label for="username">Användarnamn:</label>
-        <input type="text" id="username" name="username">
-    </div>
-    <div>
-        <label for="password">Lösenord:</label>
-        <input type="password" id="password" name="password">
-    </div>
-    <div>
-        <button type="submit">Logga in</button>
-    </div>
-</form>
+    <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
+        <div>
+            <label for="username">Användarnamn:</label>
+            <input type="text" id="username" name="username">
+        </div>
+        <div>
+            <label for="password">Lösenord:</label>
+            <input type="password" id="password" name="password">
+        </div>
+        <div>
+            <button type="submit">Logga in</button>
+        </div>
+    </form>
 
 </body>
+
 </html>
 
 <?php

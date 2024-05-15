@@ -17,7 +17,10 @@ $result = $mysqli->query($query);
 echo "<h2>Alla nyhetsbrev</h2>";
 echo "<ul>";
 while ($row = $result->fetch_assoc()) {
-    echo "<li>" . $row['title'] . "</li>";
+    echo "<li>";
+    echo $row['title'];
+    echo " <a href='theNewsletter.php?id=" . $row['id'] . "'>Läs mer</a>"; // Lägg till en länk till varje nyhetsbrev
+    echo "</li>";
 }
 echo "</ul>";
 
