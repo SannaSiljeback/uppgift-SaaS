@@ -1,5 +1,4 @@
 <?php
-include 'header.php';
 
 // Anslut till databasen
 $mysqli = new mysqli("db", "root", "notSecureChangeMe", "uppgift2");

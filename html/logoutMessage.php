@@ -1,1 +1,0 @@
-du är utloggad, yay

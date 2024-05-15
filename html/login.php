@@ -1,4 +1,5 @@
 <?php
+ob_start(); // Starta outputbuffring
 include_once 'functions.php';
 include 'header.php';
 
@@ -134,4 +135,8 @@ function verifyLogin($username, $password) {
 
 <?php
 include 'footer.php';
+?>
+
+<?php
+ob_end_flush(); // Skicka buffrad output till webbläsaren
 ?>
