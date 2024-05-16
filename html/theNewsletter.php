@@ -4,7 +4,6 @@ include 'header.php';
 
 //FRÅGA: ska denna också visa owner av nyhetsbrevet?
 
-
 // Placera kodsnutten för att kontrollera sessionsvariabler här
 if (session_status() === PHP_SESSION_ACTIVE) {
     echo "<pre>";
@@ -29,10 +28,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 }
 
-
 // Visa alla nyhetsbrev med knappar bredvid dem
 echo "<ul>";
 foreach ($newsletters as $newsletter) {
+    // Kontrollera om titeln eller beskrivningen är tom
+    if (empty($newsletter['title']) || empty($newsletter['description'])) {
+        continue; // Hoppa över denna iteration om nyhetsbrevet är tomt
+    }
+
     echo "<li>";
     echo "<h3>{$newsletter['title']}</h3>";
     echo "<p>{$newsletter['description']}</p>";
