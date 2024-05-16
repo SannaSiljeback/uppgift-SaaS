@@ -19,13 +19,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $error_message = "Email already exists.";
         } else {
             if ($role === 'customer' || $role === 'subscriber') {
-                if (createUser($email, $password, $firstName, $lastName, $role)) {
+                $userId = createUser($email, $password, $firstName, $lastName, $role);
+                if ($userId) {
                     $success_message = ucfirst($role) . " created successfully.";
-                    if ($role === 'subscriber') {
-                        if (subscribeToNewsletter($userId, $email)) {
-                            $success_message .= " Subscribed to newsletter.";
+                    if ($role === 'customer') {
+                        if (createNewsletter($userId, $email)) {
+                            $success_message .= " Newsletter created.";
                         } else {
-                            $error_message .= " Failed to subscribe to newsletter.";
+                            $error_message .= " Failed to create to newsletter.";
                         }
                     }
                 } else {
@@ -79,21 +80,13 @@ function createUser($email, $password, $firstName, $lastName, $role)
 
     $lastId = $mysqli->insert_id;
 
-    if ($result && $role === 'customer') {
-        if (subscribeToNewsletter($lastId, $email)) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
     $stmt->close();
     $mysqli->close();
 
-    return $result;
+    return $lastId;
 }
 
-function subscribeToNewsletter($userId, $email)
+function createNewsletter($userId, $email)
 {
     $mysqli = connectToDatabase();
     if ($mysqli->connect_error) {
