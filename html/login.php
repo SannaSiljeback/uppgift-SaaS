@@ -20,7 +20,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         if ($_SESSION['user_role'] == 'subscriber') {
             header("Location: theNewsletter.php");
         } else if ($_SESSION['user_role'] == 'customer') {
-            header("Location: subscribers.php");
+            header("Location: myNewsletter.php");
         }
         exit;
     } else {
@@ -135,6 +135,9 @@ function verifyLogin($username, $password)
         </div>
         <div>
             <button type="submit">Logga in</button>
+        </div>
+        <div>
+            <a href="resetPassword.php">Glömt lösenord?</a>
         </div>
     </form>
 

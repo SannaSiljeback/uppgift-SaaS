@@ -27,7 +27,7 @@ include_once 'functions.php';
                 <li><a href="mySubscriptions.php">Mina prenumerationer</a></li>
             <?php } ?>
             <?php if ($user_is_customer) { // Om användaren är en kund ?>
-                <li><a href="myNewsletter.php">Mitt nyhetsbrev</a></li>
+                <li><a href="subscribers.php">Mina prenumeranter</a></li>
             <?php } ?>
             <li><a href="logout.php">Logga ut</a></li>
         </ul>

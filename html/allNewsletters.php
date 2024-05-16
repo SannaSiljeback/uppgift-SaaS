@@ -24,6 +24,12 @@ while ($row = $result->fetch_assoc()) {
 }
 echo "</ul>";
 
+// Lägg till en länk till index.php om vi inte redan är där
+if (basename($_SERVER['PHP_SELF']) != 'index.php') {
+    echo "<p><a href='index.php'>Gå tillbaka till startsidan</a></p>";
+}
+
+
 // Stäng anslutningen till databasen
 $mysqli->close();
 

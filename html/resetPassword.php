@@ -52,6 +52,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             echo 'Curl error: ' . curl_error($ch);
         } else {
             echo 'Mail sent successfully!';
+            echo '<p>En kod har skickats till din e-postadress. <a href="newPassword.php">Klicka här</a> för att gå vidare och återställa ditt lösenord.</p>';
         }
 
         // Stäng cURL-resursen
