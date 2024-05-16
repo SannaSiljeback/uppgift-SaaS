@@ -17,6 +17,11 @@ $result = $mysqli->query($query);
 echo "<h2>Alla nyhetsbrev</h2>";
 echo "<ul>";
 while ($row = $result->fetch_assoc()) {
+    // Kontrollera om både titeln och beskrivningen är tomma strängar
+    if ($row['title'] === '' && $row['description'] === '') {
+        continue; // Hoppa över den aktuella iterationen och gå vidare till nästa rad
+    }
+
     echo "<li>";
     echo $row['title'];
     echo " <a href='theNewsletter.php?id=" . $row['id'] . "'>Läs mer</a>"; // Lägg till en länk till varje nyhetsbrev
@@ -28,7 +33,6 @@ echo "</ul>";
 if (basename($_SERVER['PHP_SELF']) != 'index.php') {
     echo "<p><a href='index.php'>Gå tillbaka till startsidan</a></p>";
 }
-
 
 // Stäng anslutningen till databasen
 $mysqli->close();
