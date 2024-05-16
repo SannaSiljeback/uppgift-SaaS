@@ -13,17 +13,21 @@ include_once 'functions.php';
 <body>
 
 <header>
-    <!-- Navigationsmeny -->
+<!-- Navigationsmeny -->
 <nav>
     <?php
     // Bestäm användarens roll baserat på inloggningstillstånd
     if (is_signed_in()) {
-        $user_role = user_has_role('subscriber'); // Kontrollera om användaren har rollen 'subscriber'
+        $user_is_subscriber = user_has_role('subscriber'); // Kontrollera om användaren har rollen 'subscriber'
+        $user_is_customer = user_has_role('customer'); // Kontrollera om användaren har rollen 'customer'
         ?>
         <ul>
             <li><a href="allNewsletters.php">Alla nyhetsbrev</a></li>
-            <?php if ($user_role) { // Om användaren är en prenumerant ?>
+            <?php if ($user_is_subscriber) { // Om användaren är en prenumerant ?>
                 <li><a href="mySubscriptions.php">Mina prenumerationer</a></li>
+            <?php } ?>
+            <?php if ($user_is_customer) { // Om användaren är en kund ?>
+                <li><a href="myNewsletter.php">Mitt nyhetsbrev</a></li>
             <?php } ?>
             <li><a href="logout.php">Logga ut</a></li>
         </ul>
