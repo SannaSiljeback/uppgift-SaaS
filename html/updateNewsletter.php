@@ -2,6 +2,10 @@
 include_once 'functions.php';
 include 'header.php';
 
+
+//RADERA?!  
+
+
 // Anslut till databasen
 $mysqli = connectToDatabase();
 
