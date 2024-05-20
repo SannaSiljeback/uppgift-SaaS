@@ -1,16 +1,10 @@
 <?php
 include_once 'functions.php';
-include 'header.php';
+// include 'header.php';
 
-//FRÅGA: ska denna också visa owner av nyhetsbrevet?
-
-// Placera kodsnutten för att kontrollera sessionsvariabler här
-if (session_status() === PHP_SESSION_ACTIVE) {
-    echo "<pre>";
-    var_dump($_SESSION);
-    echo "</pre>";
-} else {
-    echo "Sessionen är inte igång.";
+if (basename($_SERVER['PHP_SELF']) != 'index.php') {
+    include 'header.php';
+    // echo "<p><a href='index.php'>Gå tillbaka till startsidan</a></p>";
 }
 
 // Hämta alla tillgängliga nyhetsbrev från databasen
@@ -29,6 +23,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 }
 
 // Visa alla nyhetsbrev med knappar bredvid dem
+echo "<h2>Alla nyhetsbrev</h2>";
 echo "<ul>";
 foreach ($newsletters as $newsletter) {
     // Kontrollera om titeln eller beskrivningen är tom

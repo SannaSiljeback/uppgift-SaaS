@@ -5,5 +5,3 @@ include 'header.php'; // Inkludera header här
 // Visa alla nyhetsbrev
 include 'allNewsletters.php'; 
  ?>
-
-<?php include 'footer.php'; ?>

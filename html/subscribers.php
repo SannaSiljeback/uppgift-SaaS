@@ -1,7 +1,7 @@
 <?php
-include 'header.php';
+// include 'header.php';
 
-echo "User ID: " . $_SESSION['user_id'];
+// echo "User ID: " . $_SESSION['user_id'];
 
 // Kontrollera om användaren är inloggad
 if (!is_signed_in()) {
@@ -64,9 +64,9 @@ if ($resultGetNewsletter->num_rows > 0) {
 }
 
 // Lägg till en länk till index.php om vi inte redan är där
-if (basename($_SERVER['PHP_SELF']) != 'myNewsletter.php') {
-    echo "<p><a href='myNewsletter.php'>Gå tillbaka till ditt nyhetsbrev</a></p>";
-}
+// if (basename($_SERVER['PHP_SELF']) != 'myNewsletter.php') {
+//     echo "<p><a href='myNewsletter.php'>Gå tillbaka till ditt nyhetsbrev</a></p>";
+// }
 
 // Stäng anslutningen till databasen
 $mysqli->close();

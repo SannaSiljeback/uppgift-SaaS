@@ -22,12 +22,12 @@ include_once 'functions.php';
         $user_is_customer = user_has_role('customer'); // Kontrollera om användaren har rollen 'customer'
         ?>
         <ul>
-            <li><a href="allNewsletters.php">Alla nyhetsbrev</a></li>
+            <li><a href="index.php">Startsidan</a></li>
             <?php if ($user_is_subscriber) { // Om användaren är en prenumerant ?>
-                <li><a href="mySubscriptions.php">Mina prenumerationer</a></li>
+                <li><a href="myPage.php">Mina sidor</a></li>
             <?php } ?>
             <?php if ($user_is_customer) { // Om användaren är en kund ?>
-                <li><a href="subscribers.php">Mina prenumeranter</a></li>
+                <li><a href="myPage.php">Mina sidor</a></li>
             <?php } ?>
             <li><a href="logout.php">Logga ut</a></li>
         </ul>
@@ -36,7 +36,7 @@ include_once 'functions.php';
         // Visa inloggning och registreringsknappar om användaren är utloggad
         ?>
         <ul>
-            <li><a href="allNewsletters.php">Alla nyhetsbrev</a></li>
+            <li><a href="index.php">Startsidan</a></li>
             <li><a href="login.php">Logga in</a></li>
             <li><a href="createAccount.php">Skapa konto</a></li>
         </ul>

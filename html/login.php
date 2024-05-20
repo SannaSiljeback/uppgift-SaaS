@@ -18,9 +18,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         // Omdirigera till olika sidor baserat på användarens roll
         if ($_SESSION['user_role'] == 'subscriber') {
-            header("Location: theNewsletter.php");
+            header("Location: myPage.php");
         } else if ($_SESSION['user_role'] == 'customer') {
-            header("Location: myNewsletter.php");
+            header("Location: myPage.php");
         }
         exit;
     } else {
@@ -29,14 +29,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 }
 
-// Placera kodsnutten för att kontrollera sessionsvariabler här
-if (session_status() === PHP_SESSION_ACTIVE) {
-    echo "<pre>";
-    var_dump($_SESSION);
-    echo "</pre>";
-} else {
-    echo "Sessionen är inte igång.";
-}
 
 // Funktion för att hämta användarroller från databasen baserat på användarnamn
 function getUserRoles($userId)

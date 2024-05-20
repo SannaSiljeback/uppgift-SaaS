@@ -2,9 +2,19 @@
 include_once 'functions.php';
 include 'header.php';
 
-if (isset($_SESSION['user_id'])) {
-    echo '<a href="logout.php">Logga ut</a>';
+
+
+if ($_SESSION['user_role'] == 'customer') {
+    
+    include 'myNewsletter.php';
+    include 'subscribers.php';
+} elseif ($_SESSION['user_role'] == 'subscriber') {
+    echo "Välkommen till mina sidor";
+    include 'mySubscriptions.php';
+    include 'theNewsletter.php';
+    
 }
 
-include 'footer.php';
+
+
 ?>

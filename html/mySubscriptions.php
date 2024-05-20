@@ -1,6 +1,6 @@
 <?php
 include_once 'functions.php';
-include 'header.php';
+// include 'header.php';
 
 // Kontrollera om användaren är inloggad
 if (!is_signed_in()) {
@@ -35,8 +35,12 @@ while ($row = $result->fetch_assoc()) {
 }
 echo "</ul>";
 
+// Lägg till en länk tillbaka till myPage
+// echo '<a href="myPage.php">Tillbaka till mina sidor</a>';
+// echo "<br>";
+
 // Stäng anslutningen till databasen
 $mysqli->close();
 
-include 'footer.php';
+// include 'footer.php';
 ?>

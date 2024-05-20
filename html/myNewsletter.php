@@ -1,5 +1,5 @@
 <?php
-include 'header.php';
+// include 'header.php';
 include_once 'functions.php';
 
 // 1. Anslut till databasen
@@ -20,7 +20,7 @@ $stmt->execute();
 $result = $stmt->get_result();
 
 // 3. Visa nyhetsbrevens information på sidan
-echo "<h2>Nyhetsbrev som jag äger</h2>";
+echo "<h2>Mitt nyhetsbrev</h2>";
 
 $updatedDescription = null;
 
@@ -64,5 +64,5 @@ if ($result->num_rows > 0) { // Kontrollera om det finns resultat från SQL-frå
 // Stäng anslutningen till databasen
 $mysqli->close();
 
-include 'footer.php';
+// include 'footer.php';
 ?>
