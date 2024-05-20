@@ -1,21 +1,11 @@
 <?php
+include_once 'functions.php';
+$mysqli = connectToDatabase();
 
-
-
-// Anslut till databasen
-$mysqli = new mysqli("db", "root", "notSecureChangeMe", "uppgift2");
-
-// Kontrollera anslutningen
-if ($mysqli->connect_errno) {
-    echo "Failed to connect to MySQL: " . $mysqli->connect_error;
-    exit();
-}
 
 if (basename($_SERVER['PHP_SELF']) != 'index.php') {
     include 'header.php';
 }
-
-
 
 // Hämta data från databasen
 $query = "SELECT * FROM newsletters";

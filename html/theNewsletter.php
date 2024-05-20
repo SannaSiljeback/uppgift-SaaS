@@ -79,13 +79,7 @@ echo "</ul>";
 // Funktion för att hämta alla nyhetsbrev från databasen
 function getAllNewsletters()
 {
-    // Anslut till databasen
     $mysqli = connectToDatabase();
-
-    // Kontrollera anslutningen
-    if ($mysqli->connect_error) {
-        die("Connection failed: " . $mysqli->connect_error);
-    }
 
     // Förbered en SQL-fråga för att hämta alla nyhetsbrev
     $query = "SELECT id, title, description FROM newsletters";
@@ -110,13 +104,7 @@ function getAllNewsletters()
 // Funktion för att kontrollera om användaren är prenumerant
 function checkSubscriberStatus($user_id, $newsletter_id)
 {
-    // Anslut till databasen
     $mysqli = connectToDatabase();
-
-    // Kontrollera anslutningen
-    if ($mysqli->connect_error) {
-        die("Connection failed: " . $mysqli->connect_error);
-    }
 
     // Förbered en SQL-fråga för att kontrollera om användaren är prenumerant av nyhetsbrevet
     $query = "SELECT * FROM subscriptions WHERE user_id = ? AND newsletter_id = ?";
@@ -147,13 +135,7 @@ function checkSubscriberStatus($user_id, $newsletter_id)
 
 function handleSubscription($user_id, $newsletter_id, $action)
 {
-    // Anslut till databasen
     $mysqli = connectToDatabase();
-
-    // Kontrollera anslutningen
-    if ($mysqli->connect_error) {
-        die("Connection failed: " . $mysqli->connect_error);
-    }
 
     // Kontrollera om användaren finns i users-tabellen
     if (userExists($mysqli, $user_id)) {

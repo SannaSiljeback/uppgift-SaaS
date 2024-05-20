@@ -41,14 +41,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 // Funktion för att kontrollera om e-postadressen finns i databasen
 function emailExists($email) {
-    // Anslut till databasen och utför en SQL-fråga för att söka efter den angivna e-postadressen
-    $mysqli = new mysqli("db", "root", "notSecureChangeMe", "uppgift2");
-
-    // Kontrollera anslutningen
-    if ($mysqli->connect_error) {
-        error_log("Connection failed: ". $mysqli->connect_error);
-        return false;
-    }
+    $mysqli = connectToDatabase();
 
     $query = "SELECT email FROM users WHERE email =?";
     $stmt = $mysqli->prepare($query);
@@ -69,10 +62,7 @@ function emailExists($email) {
 // Funktion för att verifiera användarens inloggningsuppgifter
 function verifyLogin($email, $password) {
     try {
-        $mysqli = new mysqli("db", "root", "notSecureChangeMe", "uppgift2");
-        if ($mysqli->connect_error) {
-            throw new Exception("Connection failed: ". $mysqli->connect_error);
-        }
+        $mysqli = connectToDatabase();
 
         $query = "SELECT password FROM users WHERE email =?";
         $stmt = $mysqli->prepare($query);
@@ -105,11 +95,7 @@ function verifyLogin($email, $password) {
 
 // Funktion för att ändra användarens lösenord
 function changePassword($email, $newPassword) {
-    $mysqli = new mysqli("db", "root", "notSecureChangeMe", "uppgift2");
-
-    if ($mysqli->connect_error) {
-        die("Connection failed: ". $mysqli->connect_error);
-    }
+    $mysqli = connectToDatabase();
 
     $hashedPassword = password_hash($newPassword, PASSWORD_DEFAULT);
 
@@ -128,14 +114,7 @@ function changePassword($email, $newPassword) {
 
 // Funktion för att kontrollera om koden stämmer med tabellen resetPassword
 function verifyCode($verification_code, $email) {
-    // Anslut till databasen
-    $mysqli = new mysqli("db", "root", "notSecureChangeMe", "uppgift2");
-
-    // Kontrollera anslutningen
-    if ($mysqli->connect_error) {
-        error_log("Connection failed: " . $mysqli->connect_error);
-        return false;
-    }
+    $mysqli = connectToDatabase();
 
     // Förbered en SQL-fråga för att hämta koden från tabellen resetPassword
     $query = "SELECT code FROM resetPassword WHERE code = ? AND email = ?";

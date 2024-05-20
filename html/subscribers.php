@@ -20,14 +20,7 @@ if (!is_signed_in()) {
 }
 
 
-// Anslut till databasen
-$mysqli = new mysqli("db", "root", "notSecureChangeMe", "uppgift2");
-
-// Kontrollera anslutningen
-if ($mysqli->connect_errno) {
-    echo "Failed to connect to MySQL: " . $mysqli->connect_error;
-    exit();
-}
+$mysqli = connectToDatabase();
 
 
 if (isset($_SESSION['user_id'])) {
@@ -72,11 +65,6 @@ if ($resultGetNewsletter->num_rows > 0) {
     echo "Inga prenumeranter hittades för den inloggade användaren.";
 }
 }
-
-// Lägg till en länk till index.php om vi inte redan är där
-// if (basename($_SERVER['PHP_SELF']) != 'myNewsletter.php') {
-//     echo "<p><a href='myNewsletter.php'>Gå tillbaka till ditt nyhetsbrev</a></p>";
-// }
 
 // Stäng anslutningen till databasen
 $mysqli->close();

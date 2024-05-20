@@ -16,14 +16,7 @@ if (!is_signed_in()) {
     exit;
 }
 
-// Anslut till databasen
-$mysqli = new mysqli("db", "root", "notSecureChangeMe", "uppgift2");
-
-// Kontrollera anslutningen
-if ($mysqli->connect_errno) {
-    echo "Failed to connect to MySQL: " . $mysqli->connect_error;
-    exit();
-}
+$mysqli = connectToDatabase();
 
 // Hämta data från databasen
 $query = "SELECT newsletters.* FROM newsletters 
@@ -41,10 +34,6 @@ while ($row = $result->fetch_assoc()) {
     echo "<li>" . $row['title'] . "</li>";
 }
 echo "</ul>";
-
-// Lägg till en länk tillbaka till myPage
-// echo '<a href="myPage.php">Tillbaka till mina sidor</a>';
-// echo "<br>";
 
 // Stäng anslutningen till databasen
 $mysqli->close();

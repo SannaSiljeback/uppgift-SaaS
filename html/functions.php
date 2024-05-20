@@ -48,3 +48,6 @@ function connectToDatabase()
     }
     return $mysqli;
 }
+
+
+

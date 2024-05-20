@@ -69,14 +69,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 // Funktion för att kontrollera om e-postadressen finns i användartabellen
 function emailExistsInDatabase($email) {
-    // Anslut till din databas
-    $mysqli = new mysqli("db", "root", "notSecureChangeMe", "uppgift2");
-
-    // Kontrollera anslutningen
-    if ($mysqli->connect_errno) {
-        echo "Failed to connect to MySQL: " . $mysqli->connect_error;
-        exit();
-    }
+    $mysqli = connectToDatabase();
 
     // Förbered och utför en SQL-fråga för att kontrollera om e-postadressen finns i tabellen
     $query = "SELECT COUNT(*) AS count FROM users WHERE email = ?";
@@ -105,14 +98,7 @@ function emailExistsInDatabase($email) {
 
 // Funktion för att hämta användarens id från users-tabellen baserat på e-postadressen
 function getUserIdFromEmail($email) {
-    // Anslut till din databas
-    $mysqli = new mysqli("db", "root", "notSecureChangeMe", "uppgift2");
-
-    // Kontrollera anslutningen
-    if ($mysqli->connect_errno) {
-        echo "Failed to connect to MySQL: " . $mysqli->connect_error;
-        exit();
-    }
+    $mysqli = connectToDatabase();
 
     // Förbered och utför en SQL-fråga för att hämta användarens id från users-tabellen
     $query = "SELECT id FROM users WHERE email = ?";
@@ -137,14 +123,7 @@ function saveResetCodeToDatabase($email, $code) {
     // Hämta användar-ID från users-tabellen baserat på e-postadressen
     $user_id = getUserIdFromEmail($email);
 
-    // Anslut till din databas
-    $mysqli = new mysqli("db", "root", "notSecureChangeMe", "uppgift2");
-
-    // Kontrollera anslutningen
-    if ($mysqli->connect_errno) {
-        echo "Failed to connect to MySQL: " . $mysqli->connect_error;
-        exit();
-    }
+    $mysqli = connectToDatabase();
 
     // Förbered och utför en SQL-fråga för att spara koden och användar-ID i databasen
     $query = "INSERT INTO resetPassword (user_id, email, code) VALUES (?, ?, ?)";

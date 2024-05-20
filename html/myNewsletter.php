@@ -9,14 +9,7 @@ if ($_SESSION['user_role'] != 'customer') {
     exit;
 }
 
-// 1. Anslut till databasen
-$mysqli = new mysqli("db", "root", "notSecureChangeMe", "uppgift2");
-
-// Kontrollera anslutningen
-if ($mysqli->connect_errno) {
-    echo "Failed to connect to MySQL: " . $mysqli->connect_error;
-    exit();
-}
+$mysqli = connectToDatabase();
 
 // 2. Hämta nyhetsbrev som ägs av en specifik användare
 $user_id = $_SESSION['user_id'] ?? ''; // Antag att du har använt sessioner för att lagra användar-ID

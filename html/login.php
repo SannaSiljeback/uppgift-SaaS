@@ -30,14 +30,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 // Funktion för att hämta användarroller från databasen baserat på användarnamn
 function getUserRoles($userId)
 {
-    // Anslut till databasen (anpassa anslutningsparametrarna efter din server)
-    $mysqli = new mysqli("db", "root", "notSecureChangeMe", "uppgift2");
-
-    // Kontrollera anslutningen
-    if ($mysqli->connect_errno) {
-        echo "Failed to connect to MySQL: " . $mysqli->connect_error;
-        exit();
-    }
+    $mysqli = connectToDatabase();
 
     // Förbered och utför en SQL-fråga för att hämta användarrollerna baserat på användarnamn
     $query = "SELECT role FROM users WHERE id = ?";
@@ -65,14 +58,7 @@ function getUserRoles($userId)
 // Funktion för att verifiera inloggning mot databasen
 function verifyLogin($username, $password)
 {
-    // Anslut till databasen (anpassa anslutningsparametrarna efter din server)
-    $mysqli = new mysqli("db", "root", "notSecureChangeMe", "uppgift2");
-
-    // Kontrollera anslutningen
-    if ($mysqli->connect_errno) {
-        echo "Failed to connect to MySQL: " . $mysqli->connect_error;
-        exit();
-    }
+    $mysqli = connectToDatabase();
 
     // Förbered och utför en SQL-fråga för att kontrollera användaruppgifterna
     $query = "SELECT * FROM users WHERE email = ?";
