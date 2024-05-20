@@ -2,6 +2,13 @@
 // include 'header.php';
 include_once 'functions.php';
 
+// Kontrollera användarens roll
+if ($_SESSION['user_role'] != 'customer') {
+    // Användaren har inte rätt behörighet, omdirigera till no-access-sidan
+    header("Location: noAccess.php");
+    exit;
+}
+
 // 1. Anslut till databasen
 $mysqli = new mysqli("db", "root", "notSecureChangeMe", "uppgift2");
 

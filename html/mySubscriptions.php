@@ -2,6 +2,13 @@
 include_once 'functions.php';
 // include 'header.php';
 
+// Kontrollera användarens roll
+if ($_SESSION['user_role'] != 'subscriber') {
+    // Användaren har inte rätt behörighet, omdirigera till no-access-sidan
+    header("Location: noAccess.php");
+    exit;
+}
+
 // Kontrollera om användaren är inloggad
 if (!is_signed_in()) {
     echo "Du måste vara inloggad för att se dina prenumerationer.";

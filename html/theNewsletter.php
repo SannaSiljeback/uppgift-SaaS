@@ -7,6 +7,13 @@ include_once 'functions.php';
 //     // echo "<p><a href='index.php'>Gå tillbaka till startsidan</a></p>";
 // }
 
+// Kontrollera användarens roll
+if ($_SESSION['user_role'] != 'subscriber') {
+    // Användaren har inte rätt behörighet, omdirigera till no-access-sidan
+    header("Location: noAccess.php");
+    exit;
+}
+
 // Hämta alla tillgängliga nyhetsbrev från databasen
 $newsletters = getAllNewsletters();
 

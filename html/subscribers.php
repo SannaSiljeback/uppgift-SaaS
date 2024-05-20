@@ -1,7 +1,16 @@
 <?php
+include_once 'functions.php';
 // include 'header.php';
 
 // echo "User ID: " . $_SESSION['user_id'];
+
+// Kontrollera användarens roll
+if ($_SESSION['user_role'] != 'customer') {
+    // Användaren har inte rätt behörighet, omdirigera till no-access-sidan
+    header("Location: noAccess.php");
+    exit;
+}
+
 
 // Kontrollera om användaren är inloggad
 if (!is_signed_in()) {
@@ -9,6 +18,7 @@ if (!is_signed_in()) {
     include 'footer.php';
     exit;
 }
+
 
 // Anslut till databasen
 $mysqli = new mysqli("db", "root", "notSecureChangeMe", "uppgift2");

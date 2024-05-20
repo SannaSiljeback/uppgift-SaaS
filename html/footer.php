@@ -1,3 +1,3 @@
 <?php
-    echo 'en footer 1';
+    echo 'en footer';
 ?>
