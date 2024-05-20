@@ -90,7 +90,7 @@ function verifyLogin($email, $password) {
             $row = $result->fetch_assoc();
             $stored_password = $row['password'];
 
-            if ($password === $stored_password) {
+            if (password_verify($password, $stored_password)) {
                 return true;
             }
         }
@@ -111,10 +111,12 @@ function changePassword($email, $newPassword) {
         die("Connection failed: ". $mysqli->connect_error);
     }
 
+    $hashedPassword = password_hash($newPassword, PASSWORD_DEFAULT);
+
     $query = "UPDATE users SET password =? WHERE email =?";
     $stmt = $mysqli->prepare($query);
 
-    $stmt->bind_param("ss", $newPassword, $email);
+    $stmt->bind_param("ss", $hashedPassword, $email);
 
     $result = $stmt->execute();
 

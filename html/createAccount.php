@@ -69,13 +69,17 @@ function createUser($email, $password, $firstName, $lastName, $role)
         die("Connection failed: " . $mysqli->connect_error);
     }
 
+    // Hash the password
+    $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+
     $query = "INSERT INTO users (email, password, firstName, lastName, role) VALUES (?, ?, ?, ?, ?)";
     $stmt = $mysqli->prepare($query);
     if (!$stmt) {
         die("Prepare failed: " . $mysqli->error);
     }
 
-    $stmt->bind_param("sssss", $email, $password, $firstName, $lastName, $role);
+    // Use the hashed password instead of the plain one
+    $stmt->bind_param("sssss", $email, $hashedPassword, $firstName, $lastName, $role);
     $result = $stmt->execute();
 
     $lastId = $mysqli->insert_id;

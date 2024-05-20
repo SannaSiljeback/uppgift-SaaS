@@ -75,20 +75,23 @@ function verifyLogin($username, $password)
     }
 
     // Förbered och utför en SQL-fråga för att kontrollera användaruppgifterna
-    $query = "SELECT * FROM users WHERE email = ? AND password = ?";
+    $query = "SELECT * FROM users WHERE email = ?";
     $stmt = $mysqli->prepare($query);
-    $stmt->bind_param("ss", $username, $password);
+    $stmt->bind_param("s", $username);
     $stmt->execute();
     $result = $stmt->get_result();
 
     // Kontrollera om det finns en matchande rad i resultatet
     if ($result->num_rows == 1) {
         $user = $result->fetch_assoc();
-        // Returnera användarens id, roll och förnamn
-        return array('id' => $user['id'], 'role' => $user['role'], 'firstName' => $user['firstName']);
-    } else {
-        return false; // Användaren finns inte eller lösenordet är felaktigt
+        // Kontrollera om lösenordet matchar det hashade lösenordet
+        if (password_verify($password, $user['password'])) {
+            // Returnera användarens id, roll och förnamn
+            return array('id' => $user['id'], 'role' => $user['role'], 'firstName' => $user['firstName']);
+        }
     }
+
+    return false; // Användaren finns inte eller lösenordet är felaktigt
 
     // Stäng anslutningen till databasen
     $stmt->close();
