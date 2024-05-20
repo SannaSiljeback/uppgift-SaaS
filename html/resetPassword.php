@@ -1,12 +1,14 @@
 <?php
 include_once 'functions.php';
+include_once '.env';
 include 'header.php';
+
 
 // Om formuläret har postats
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Mailgun API-nyckel och domän
-    $api_key = 'e81d762c845ce3f5c6f722e2102b1ab7-ed54d65c-2e9c08b4';
-    $domain = 'sandbox92fa9355d2ba47daa8646868b9080ed6.mailgun.org';
+    $api_key = getenv('API_KEY');
+    $domain = getenv('MAILGUN_DOMAIN');
 
     // Mottagarens e-postadress
     $recipient = $_POST['email'] ?? '';
