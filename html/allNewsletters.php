@@ -1,5 +1,7 @@
 <?php
 
+
+
 // Anslut till databasen
 $mysqli = new mysqli("db", "root", "notSecureChangeMe", "uppgift2");
 
@@ -8,6 +10,12 @@ if ($mysqli->connect_errno) {
     echo "Failed to connect to MySQL: " . $mysqli->connect_error;
     exit();
 }
+
+if (basename($_SERVER['PHP_SELF']) != 'index.php') {
+    include 'header.php';
+}
+
+
 
 // Hämta data från databasen
 $query = "SELECT * FROM newsletters";
@@ -24,18 +32,25 @@ while ($row = $result->fetch_assoc()) {
 
     echo "<li>";
     echo $row['title'];
-    echo " <a href='theNewsletter.php?id=" . $row['id'] . "'>Läs mer</a>"; // Lägg till en länk till varje nyhetsbrev
+    echo " <a href='#' onclick='showDescription(" . $row['id'] . ")'>Läs mer</a>"; // Lägg till en länk med onclick för att visa beskrivningen
+    echo "<div id='description-" . $row['id'] . "' style='display:none;'>" . $row['description'] . "</div>"; // Gömd beskrivning
     echo "</li>";
 }
 echo "</ul>";
-
-// Lägg till en länk till index.php om vi inte redan är där
-if (basename($_SERVER['PHP_SELF']) != 'index.php') {
-    echo "<p><a href='index.php'>Gå tillbaka till startsidan</a></p>";
-}
 
 // Stäng anslutningen till databasen
 $mysqli->close();
 
 include 'footer.php';
 ?>
+
+<script>
+function showDescription(id) {
+    var descriptionDiv = document.getElementById('description-' + id);
+    if (descriptionDiv.style.display === 'none') {
+        descriptionDiv.style.display = 'block';
+    } else {
+        descriptionDiv.style.display = 'none';
+    }
+}
+</script>

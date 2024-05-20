@@ -2,10 +2,10 @@
 include_once 'functions.php';
 // include 'header.php';
 
-if (basename($_SERVER['PHP_SELF']) != 'index.php') {
-    include 'header.php';
-    // echo "<p><a href='index.php'>Gå tillbaka till startsidan</a></p>";
-}
+// if (basename($_SERVER['PHP_SELF']) != 'index.php') {
+//     include 'header.php';
+//     // echo "<p><a href='index.php'>Gå tillbaka till startsidan</a></p>";
+// }
 
 // Hämta alla tillgängliga nyhetsbrev från databasen
 $newsletters = getAllNewsletters();
