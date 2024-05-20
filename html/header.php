@@ -16,21 +16,19 @@ include_once 'functions.php';
 <body>
 
     <header>
-        <!-- Navigationsmeny -->
         <nav>
             <?php
-            // Bestäm användarens roll baserat på inloggningstillstånd
             if (is_signed_in()) {
-                $user_is_subscriber = user_has_role('subscriber'); // Kontrollera om användaren har rollen 'subscriber'
-                $user_is_customer = user_has_role('customer'); // Kontrollera om användaren har rollen 'customer'
+                $user_is_subscriber = user_has_role('subscriber');
+                $user_is_customer = user_has_role('customer');
             ?>
                 <ul>
                     <li><a href="index.php">Startsidan</a></li>
-                    <?php if ($user_is_subscriber) { // Om användaren är en prenumerant 
+                    <?php if ($user_is_subscriber) { 
                     ?>
                         <li><a href="myPage.php">Mina sidor</a></li>
                     <?php } ?>
-                    <?php if ($user_is_customer) { // Om användaren är en kund 
+                    <?php if ($user_is_customer) { 
                     ?>
                         <li><a href="myPage.php">Mina sidor</a></li>
                     <?php } ?>
@@ -38,7 +36,6 @@ include_once 'functions.php';
                 </ul>
             <?php
             } else {
-                // Visa inloggning och registreringsknappar om användaren är utloggad
             ?>
                 <ul>
                     <li><a href="index.php">Startsidan</a></li>

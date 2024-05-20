@@ -6,7 +6,6 @@ if ($_SESSION['user_role'] == 'customer') {
     include 'myNewsletter.php';
     include 'subscribers.php';
 } elseif ($_SESSION['user_role'] == 'subscriber') {
-    // Hämta användarens förnamn från sessionen
     $firstName = $_SESSION['user_firstName'];
     echo "Välkommen till mina sidor, $firstName";
     include 'mySubscriptions.php';

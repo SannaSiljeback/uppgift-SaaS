@@ -1,32 +1,22 @@
 <?php
 include_once 'functions.php';
-// include 'header.php';
 
-// echo "User ID: " . $_SESSION['user_id'];
-
-// Kontrollera användarens roll
 if ($_SESSION['user_role'] != 'customer') {
-    // Användaren har inte rätt behörighet, omdirigera till no-access-sidan
     header("Location: noAccess.php");
     exit;
 }
 
-
-// Kontrollera om användaren är inloggad
 if (!is_signed_in()) {
     echo "Du måste vara inloggad för att se dina prenumeranter.";
     include 'footer.php';
     exit;
 }
 
-
 $mysqli = connectToDatabase();
-
 
 if (isset($_SESSION['user_id'])) {
     $user_id = $_SESSION['user_id'];
 
-// Hämta newsletter_id från inloggad användare
 $sqlGetNewsletter = "SELECT id FROM newsletters WHERE owner = ?";
 $stmtGetNewsletter = $mysqli->prepare($sqlGetNewsletter);
 
@@ -41,7 +31,6 @@ if ($resultGetNewsletter->num_rows > 0) {
     $newsletter = $resultGetNewsletter->fetch_assoc();
     $newsletter_id = $newsletter['id'];
 
-    // Hämta prenumeranter av nyhetsbrevets id
     $sqlGetSubscribers = "SELECT u.email, u.role 
                           FROM users u 
                           JOIN subscriptions us ON u.id = us.user_id 
@@ -54,7 +43,6 @@ if ($resultGetNewsletter->num_rows > 0) {
     $stmtGetSubscribers->execute();
     $resultGetSubscribers = $stmtGetSubscribers->get_result();
 
-    // Bearbeta och visa data
     echo "<h2>Mina prenumeranter</h2>";
     echo "<ul>";
     while ($row = $resultGetSubscribers->fetch_assoc()) {
@@ -66,7 +54,6 @@ if ($resultGetNewsletter->num_rows > 0) {
 }
 }
 
-// Stäng anslutningen till databasen
 $mysqli->close();
 
 include 'footer.php';

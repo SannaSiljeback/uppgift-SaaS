@@ -2,33 +2,28 @@
 include_once 'functions.php';
 $mysqli = connectToDatabase();
 
-
 if (basename($_SERVER['PHP_SELF']) != 'index.php') {
     include 'header.php';
 }
 
-// Hämta data från databasen
 $query = "SELECT * FROM newsletters";
 $result = $mysqli->query($query);
 
-// Bearbeta och visa data
 echo "<h2>Alla nyhetsbrev</h2>";
 echo "<ul>";
 while ($row = $result->fetch_assoc()) {
-    // Kontrollera om både titeln och beskrivningen är tomma strängar
     if ($row['title'] === '' && $row['description'] === '') {
-        continue; // Hoppa över den aktuella iterationen och gå vidare till nästa rad
+        continue;
     }
 
     echo "<li>";
     echo $row['title'];
-    echo " <a href='#' onclick='showDescription(" . $row['id'] . ")'>Läs mer</a>"; // Lägg till en länk med onclick för att visa beskrivningen
-    echo "<div id='description-" . $row['id'] . "' style='display:none;'>" . $row['description'] . "</div>"; // Gömd beskrivning
+    echo " <a href='#' onclick='showDescription(" . $row['id'] . ")'>Läs mer</a>";
+    echo "<div id='description-" . $row['id'] . "' style='display:none;'>" . $row['description'] . "</div>";
     echo "</li>";
 }
 echo "</ul>";
 
-// Stäng anslutningen till databasen
 $mysqli->close();
 
 include 'footer.php';

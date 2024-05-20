@@ -1,36 +1,29 @@
 <?php
-// include 'header.php';
 include_once 'functions.php';
 
-// Kontrollera användarens roll
 if ($_SESSION['user_role'] != 'customer') {
-    // Användaren har inte rätt behörighet, omdirigera till no-access-sidan
     header("Location: noAccess.php");
     exit;
 }
 
 $mysqli = connectToDatabase();
 
-// 2. Hämta nyhetsbrev som ägs av en specifik användare
-$user_id = $_SESSION['user_id'] ?? ''; // Antag att du har använt sessioner för att lagra användar-ID
+$user_id = $_SESSION['user_id'] ?? '';
 $query = "SELECT * FROM newsletters WHERE owner = ?";
 $stmt = $mysqli->prepare($query);
 $stmt->bind_param("s", $user_id);
 $stmt->execute();
 $result = $stmt->get_result();
 
-// 3. Visa nyhetsbrevens information på sidan
 echo "<h2>Mitt nyhetsbrev</h2>";
 
 $updatedDescription = null;
 
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['update'])) {
-    // Kontrollera om uppdateringsformuläret har skickats
     $newsletterId = $_POST['newsletter_id'];
     $title = $_POST['title'];
     $description = $_POST['description'];
 
-    // SQL-fråga för att uppdatera nyhetsbrevet
     $query = "UPDATE newsletters SET title = ?, description = ? WHERE id = ? AND owner = ?";
     $stmt = $mysqli->prepare($query);
     $stmt->bind_param("ssis", $title, $description, $newsletterId, $user_id);
@@ -43,11 +36,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['update'])) {
         echo "<p>Failed to update newsletter. Please make sure you are the owner of the newsletter.</p>";
     }
 
-    // Stänga statement
     $stmt->close();
 }
 
-if ($result->num_rows > 0) { // Kontrollera om det finns resultat från SQL-frågan
+if ($result->num_rows > 0) {
     while ($row = $result->fetch_assoc()) {
         echo "<h3>" . $row['title'] . "</h3>";
         echo "<form method='post' action=''>";
@@ -61,8 +53,5 @@ if ($result->num_rows > 0) { // Kontrollera om det finns resultat från SQL-frå
     }
 }
 
-// Stäng anslutningen till databasen
 $mysqli->close();
-
-// include 'footer.php';
 ?>
