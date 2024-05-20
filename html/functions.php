@@ -37,6 +37,7 @@ function require_role($role)
     }
 }
 
+
 //connect to database
 function connectToDatabase()
 {

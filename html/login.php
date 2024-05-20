@@ -14,14 +14,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if ($user) {
         // Sätt session för inloggad användare och roll
         $_SESSION['user_id'] = $user['id'];
-        $_SESSION['user_role'] = $user['role']; // Sätt användarens roll i sessionen
+        $_SESSION['user_role'] = $user['role'];
+        $_SESSION['user_firstName'] = $user['firstName'];
 
-        // Omdirigera till olika sidor baserat på användarens roll
-        if ($_SESSION['user_role'] == 'subscriber') {
-            header("Location: myPage.php");
-        } else if ($_SESSION['user_role'] == 'customer') {
-            header("Location: myPage.php");
-        }
+        // Omdirigera till myPage.php oavsett användarens roll
+        header("Location: myPage.php");
         exit;
     } else {
         // Om användarnamn eller lösenord är felaktigt, visa felmeddelande
@@ -87,7 +84,8 @@ function verifyLogin($username, $password)
     // Kontrollera om det finns en matchande rad i resultatet
     if ($result->num_rows == 1) {
         $user = $result->fetch_assoc();
-        return array('id' => $user['id'], 'role' => $user['role']); // Returnera användarens id och roll
+        // Returnera användarens id, roll och förnamn
+        return array('id' => $user['id'], 'role' => $user['role'], 'firstName' => $user['firstName']);
     } else {
         return false; // Användaren finns inte eller lösenordet är felaktigt
     }

@@ -145,7 +145,7 @@ function handleSubscription($user_id, $newsletter_id, $action)
 
     // Kontrollera anslutningen
     if ($mysqli->connect_error) {
-        die("Connection failed: ". $mysqli->connect_error);
+        die("Connection failed: " . $mysqli->connect_error);
     }
 
     // Kontrollera om användaren finns i users-tabellen
@@ -162,7 +162,7 @@ function handleSubscription($user_id, $newsletter_id, $action)
 
         // Om förberedelsen misslyckas, avsluta med ett felmeddelande
         if (!$stmt) {
-            die("Prepare failed: ". $mysqli->error);
+            die("Prepare failed: " . $mysqli->error);
         }
 
         // Binda parametrarna och utför SQL-frågan
@@ -181,20 +181,20 @@ function handleSubscription($user_id, $newsletter_id, $action)
 function userExists($mysqli, $user_id)
 {
     // echo "User ID: " . $user_id . "<br>";
-    
+
     // Förbered en SQL-fråga för att kontrollera om användaren finns
     $query = "SELECT id FROM users WHERE id = ?";
     $stmt = $mysqli->prepare($query);
 
     // Om förberedelsen misslyckas, skriv ut felmeddelandet och avsluta
     if (!$stmt) {
-        die("Prepare failed: ". $mysqli->error);
+        die("Prepare failed: " . $mysqli->error);
     }
 
     // Binda parametrarna och utför SQL-frågan
     $stmt->bind_param("i", $user_id);
     if (!$stmt->execute()) {
-        die("Query execution failed: ". $stmt->error);
+        die("Query execution failed: " . $stmt->error);
     }
 
     $result = $stmt->get_result();
