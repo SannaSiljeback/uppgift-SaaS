@@ -180,7 +180,7 @@ function handleSubscription($user_id, $newsletter_id, $action)
 
 function userExists($mysqli, $user_id)
 {
-    echo "User ID: " . $user_id . "<br>";
+    // echo "User ID: " . $user_id . "<br>";
     
     // Förbered en SQL-fråga för att kontrollera om användaren finns
     $query = "SELECT id FROM users WHERE id = ?";
@@ -199,9 +199,8 @@ function userExists($mysqli, $user_id)
 
     $result = $stmt->get_result();
 
-    // Skriv ut SQL-frågan och dess resultat
-    echo "SQL query: " . $query . "<br>";
-    echo "Result: " . var_dump($result->fetch_assoc()) . "<br>";
+    // echo "SQL query: " . $query . "<br>";
+    // echo "Result: " . var_dump($result->fetch_assoc()) . "<br>";
 
     // Returnera true om användaren finns, annars false
     if ($result->num_rows > 0) {
@@ -213,10 +212,6 @@ function userExists($mysqli, $user_id)
     // Stäng frågestället
     $stmt->close();
 }
-
-
-
-
 
 ?>
 
