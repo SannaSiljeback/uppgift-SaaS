@@ -155,26 +155,26 @@ function verifyCode($verification_code, $email)
             <?php } ?>
             <div>
                 <label for="email">Email:</label>
-                <input type="email" id="email" name="email" required>
+                <input type="email" id="email" name="email" style="background-color: #FBF4EF;" required>
             </div>
             <div>
                 <label for="current_password">Current Password:</label>
-                <input type="password" id="current_password" name="current_password" required>
+                <input type="password" id="current_password" name="current_password" style="background-color: #FBF4EF;" required>
             </div>
             <div>
                 <label for="new_password">New Password:</label>
-                <input type="password" id="new_password" name="new_password" required>
+                <input type="password" id="new_password" name="new_password" style="background-color: #FBF4EF;" required>
             </div>
             <div>
                 <label for="confirm_password">Confirm Password:</label>
-                <input type="password" id="confirm_password" name="confirm_password" required>
+                <input type="password" id="confirm_password" name="confirm_password" style="background-color: #FBF4EF;" required>
             </div>
             <div>
                 <label for="verification_code">Verification Code:</label>
-                <input type="text" id="verification_code" name="verification_code" required>
+                <input type="text" id="verification_code" name="verification_code" style="background-color: #FBF4EF;" required>
             </div>
             <div>
-                <button type="submit">Change Password</button>
+                <button type="submit" style="background-color: #FBF4EF;">Change Password</button>
             </div>
         </form>
     </div>

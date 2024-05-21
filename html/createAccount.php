@@ -133,29 +133,29 @@ function createNewsletter($userId, $email)
             <?php } ?>
             <div>
                 <label for="email">Email:</label>
-                <input type="email" id="email" name="email" required>
+                <input type="email" id="email" name="email" style="background-color: #FBF4EF;" required>
             </div>
             <div>
                 <label for="password">Password:</label>
-                <input type="password" id="password" name="password" required>
+                <input type="password" id="password" name="password" style="background-color: #FBF4EF;" required>
             </div>
             <div>
                 <label for="firstName">First Name:</label>
-                <input type="text" id="firstName" name="firstName" required>
+                <input type="text" id="firstName" name="firstName" style="background-color: #FBF4EF;" required>
             </div>
             <div>
                 <label for="lastName">Last Name:</label>
-                <input type="text" id="lastName" name="lastName" required>
+                <input type="text" id="lastName" name="lastName" style="background-color: #FBF4EF;" required>
             </div>
             <div>
                 <label for="role">Role:</label>
-                <select id="role" name="role">
+                <select id="role" name="role" style="background-color: #FBF4EF;">
                     <option value="customer">Customer</option>
                     <option value="subscriber">Subscriber</option>
                 </select>
             </div>
             <div>
-                <button type="submit">Create User</button>
+                <button type="submit" style="background-color: #FBF4EF;">Create User</button>
             </div>
         </form>
     </div>

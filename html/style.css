@@ -1,15 +1,20 @@
 
 
-.container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin-top: 15px;
+body {
+    background-color: #FBF4EF;
+    
 }
 
 .welcome {
     text-align: center;
     margin-bottom: 20px;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 15px;
 }
 
 .content {
@@ -37,15 +42,15 @@
     justify-content: center;
     align-items: center;
     margin: 0;
+
 }
 
-/* Stilar för formuläret */
 form {
-    width: 300px; /* Justera bredden efter behov */
+    width: 300px; 
     padding: 20px;
     border: 1px solid #ccc;
     border-radius: 5px;
-    background-color: #f9f9f9;
+    background-color: #7CCBB3;
 }
 
 .message-container {
@@ -55,6 +60,8 @@ form {
 footer {
     text-align: center;
     padding: 10px 0;
-    background-color: #f1f1f1; /* optional: to make it stand out */
+    background-color: #7CCBB3;
     width: 100%;
+    color: black;
+   
 }

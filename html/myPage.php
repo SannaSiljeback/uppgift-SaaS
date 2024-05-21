@@ -36,7 +36,7 @@ if ($_SESSION['user_role'] == 'customer') {
 
     <div class="container">
         <div class="welcome">
-            <h2>Välkommen till mina sidor, <?php echo $firstName; ?></h2>
+            <h2>Välkommen till mina sidor, <?php echo $_SESSION['user_firstName']; ?></h2>
         </div>
         <div class="content">
             <div class="left">

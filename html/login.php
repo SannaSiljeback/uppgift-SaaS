@@ -86,17 +86,17 @@ function verifyLogin($username, $password)
 
             <div>
                 <label for="username">Användarnamn:</label>
-                <input type="text" id="username" name="username">
+                <input type="text" id="username" name="username" style="background-color: #FBF4EF;">
             </div>
             <div>
                 <label for="password">Lösenord:</label>
-                <input type="password" id="password" name="password">
+                <input type="password" id="password" name="password" style="background-color: #FBF4EF;">
             </div>
             <div>
-                <button type="submit">Logga in</button>
+                <button type="submit" style="background-color: #FBF4EF;">Logga in</button>
             </div>
             <div>
-                <a href="resetPassword.php">Glömt lösenord?</a>
+                <a href="resetPassword.php" style="color:black;">Glömt lösenord?</a>
             </div>
         </form>
     </div>
@@ -110,5 +110,5 @@ function verifyLogin($username, $password)
 </footer>
 
 <?php
-ob_end_flush(); // Skicka buffrad output till webbläsaren
+ob_end_flush();
 ?>

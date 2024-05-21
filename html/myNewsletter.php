@@ -45,10 +45,10 @@ if ($result->num_rows > 0) {
         echo "<form method='post' action='' style='width: 400px;'>";
         echo "<input type='hidden' name='newsletter_id' value='" . $row['id'] . "'>";
         echo "<label for='title'>Title:</label>";
-        echo "<input type='text' id='title' name='title' value='" . $row['title'] . "' required>";
+        echo "<input type='text' id='title' name='title' style='background-color: #FBF4EF' value='" . $row['title'] . "' required>";
         echo "<label for='description'>Description:</label>";
-        echo "<textarea id='description' name='description' rows='4' cols='50'>" . ($updatedDescription ?? $row['description']) . "</textarea>";
-        echo "<button type='submit' name='update'>Update</button>";
+        echo "<textarea id='description' name='description' style='background-color: #FBF4EF' rows='4' cols='50'>" . ($updatedDescription ?? $row['description']) . "</textarea>";
+        echo "<button type='submit' name='update' style='background-color: #FBF4EF'>Update</button>";
         echo "</form>";
     }
 }

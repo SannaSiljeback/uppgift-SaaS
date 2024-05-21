@@ -39,16 +39,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         if (curl_errno($ch)) {
             echo 'Curl error: ' . curl_error($ch);
         } else {
-            // Echo-meddelanden i mitten av skärmen
             echo '<div class="message-container">';
             echo '<p>Mail skickat!</p>';
             echo '<p>En kod har skickats till din e-postadress. <a href="newPassword.php">Klicka här</a> för att gå vidare och återställa ditt lösenord.</p>';
             echo '</div>';
         }
-
         curl_close($ch);
     } else {
-        // Echo-meddelande i mitten av skärmen
         echo '<div class="message-container">';
         echo '<p>E-postadressen finns inte i användartabellen.</p>';
         echo '</div>';
@@ -143,8 +140,8 @@ function generateRandomCode($length)
         <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
             <h2>Ange din e-postadress för att få en kod</h2>
             <label for="email">E-postadress:</label>
-            <input type="email" id="email" name="email" required>
-            <button type="submit">Skicka kod</button>
+            <input type="email" id="email" name="email" style="background-color: #FBF4EF;" required>
+            <button type="submit" style="background-color: #FBF4EF;">Skicka kod</button>
         </form>
     </div>
 </body>

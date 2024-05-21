@@ -12,6 +12,11 @@ include_once 'functions.php';
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Din Webbplats</title>
     <style>
+        nav {
+            background-color: #7CCBB3;
+            padding: 10px;
+            color: black;
+        }
         nav ul {
             list-style-type: none;
             padding: 0;

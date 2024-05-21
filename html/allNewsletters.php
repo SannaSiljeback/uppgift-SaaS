@@ -31,9 +31,9 @@ if (basename($_SERVER['PHP_SELF']) != 'index.php') {
             continue;
         }
 
-        echo "<li>";
+        echo "<li style='margin:7px;'>";
         echo $row['title'];
-        echo " <a href='#' onclick='showDescription(" . $row['id'] . ")'>Läs mer</a>";
+        echo " <a href='#' onclick='showDescription(" . $row['id'] . ")' style='color:#2F7561;'>Läs mer</a>";
         echo "<div id='description-" . $row['id'] . "' style='display:none;'>" . $row['description'] . "</div>";
         echo "</li>";
     }

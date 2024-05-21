@@ -1,3 +1,3 @@
 <?php
-    echo 'en footer';
+    echo '© 2024 Din Webbplats';
 ?>
