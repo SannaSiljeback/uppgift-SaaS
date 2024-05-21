@@ -1,3 +1,5 @@
+
+
 .container {
     display: flex;
     flex-direction: column;
@@ -28,6 +30,26 @@
 
 .right ul li {
     margin-bottom: 10px;
+}
+
+.formContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0;
+}
+
+/* Stilar för formuläret */
+form {
+    width: 300px; /* Justera bredden efter behov */
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+}
+
+.message-container {
+    text-align: center;
 }
 
 footer {

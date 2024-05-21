@@ -38,7 +38,7 @@ include_once 'functions.php';
         }
 
         header {
-            margin-bottom: 45px;
+            margin-bottom: 40px;
         }
     </style>
 </head>

@@ -2,12 +2,16 @@
 include_once 'functions.php';
 include 'header.php';
 
+// Din if-sats för hantering av formulärdata
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $email = $_POST['email'];
     $current_password = $_POST['current_password'];
     $new_password = $_POST['new_password'];
     $confirm_password = $_POST['confirm_password'];
     $verification_code = $_POST['verification_code'];
+
+    $error_message = ''; // Initiera felmeddelande
+    $success_message = ''; // Initiera framgångsmeddelande
 
     if ($new_password !== $confirm_password) {
         $error_message = "New password and confirm password do not match.";
@@ -32,7 +36,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 }
 
-function emailExists($email) {
+
+function emailExists($email)
+{
     $mysqli = connectToDatabase();
 
     $query = "SELECT email FROM users WHERE email =?";
@@ -51,19 +57,20 @@ function emailExists($email) {
     $mysqli->close();
 }
 
-function verifyLogin($email, $password) {
+function verifyLogin($email, $password)
+{
     try {
         $mysqli = connectToDatabase();
 
         $query = "SELECT password FROM users WHERE email =?";
         $stmt = $mysqli->prepare($query);
         if (!$stmt) {
-            throw new Exception("Prepare failed: ". $mysqli->error);
+            throw new Exception("Prepare failed: " . $mysqli->error);
         }
 
         $stmt->bind_param("s", $email);
         if (!$stmt->execute()) {
-            throw new Exception("Execute failed: ". $stmt->error);
+            throw new Exception("Execute failed: " . $stmt->error);
         }
 
         $result = $stmt->get_result();
@@ -79,12 +86,13 @@ function verifyLogin($email, $password) {
         $stmt->close();
         $mysqli->close();
     } catch (Exception $e) {
-        error_log("An error occurred: ". $e->getMessage());
+        error_log("An error occurred: " . $e->getMessage());
         return false;
     }
 }
 
-function changePassword($email, $newPassword) {
+function changePassword($email, $newPassword)
+{
     $mysqli = connectToDatabase();
 
     $hashedPassword = password_hash($newPassword, PASSWORD_DEFAULT);
@@ -102,7 +110,8 @@ function changePassword($email, $newPassword) {
     return $result;
 }
 
-function verifyCode($verification_code, $email) {
+function verifyCode($verification_code, $email)
+{
     $mysqli = connectToDatabase();
 
     $query = "SELECT code FROM resetPassword WHERE code = ? AND email = ?";
@@ -123,45 +132,54 @@ function verifyCode($verification_code, $email) {
 ?>
 
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Change Password</title>
 </head>
+
 <body>
-    <h2>Change Password</h2>
-    <?php if(isset($error_message)) { ?>
-        <p style="color: red;"><?php echo $error_message; ?></p>
-    <?php } ?>
-    <?php if(isset($success_message)) { ?>
-        <p style="color: green;"><?php echo $success_message; ?></p>
-    <?php } ?>
-    <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
-        <div>
-            <label for="email">Email:</label>
-            <input type="email" id="email" name="email" required>
-        </div>
-        <div>
-            <label for="current_password">Current Password:</label>
-            <input type="password" id="current_password" name="current_password" required>
-        </div>
-        <div>
-            <label for="new_password">New Password:</label>
-            <input type="password" id="new_password" name="new_password" required>
-        </div>
-        <div>
-            <label for="confirm_password">Confirm Password:</label>
-            <input type="password" id="confirm_password" name="confirm_password" required>
-        </div>
-        <div>
-            <label for="verification_code">Verification Code:</label>
-            <input type="text" id="verification_code" name="verification_code" required>
-        </div>
-        <div>
-            <button type="submit">Change Password</button>
-        </div>
-    </form>
+
+
+
+    <div class="formContainer">
+
+        <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
+            <h2>Change Password</h2>
+            <?php if (isset($error_message)) { ?>
+                <div class="message-container" style="color: red; margin-bottom: 15px;"><?php echo $error_message; ?></div>
+            <?php } ?>
+            <?php if (isset($success_message)) { ?>
+                <div class="message-container" style="color: green; margin-bottom: 15px;"><?php echo $success_message; ?></div>
+            <?php } ?>
+            <div>
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" required>
+            </div>
+            <div>
+                <label for="current_password">Current Password:</label>
+                <input type="password" id="current_password" name="current_password" required>
+            </div>
+            <div>
+                <label for="new_password">New Password:</label>
+                <input type="password" id="new_password" name="new_password" required>
+            </div>
+            <div>
+                <label for="confirm_password">Confirm Password:</label>
+                <input type="password" id="confirm_password" name="confirm_password" required>
+            </div>
+            <div>
+                <label for="verification_code">Verification Code:</label>
+                <input type="text" id="verification_code" name="verification_code" required>
+            </div>
+            <div>
+                <button type="submit">Change Password</button>
+            </div>
+        </form>
+    </div>
 </body>
+
 </html>
 
 

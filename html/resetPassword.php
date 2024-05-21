@@ -39,17 +39,24 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         if (curl_errno($ch)) {
             echo 'Curl error: ' . curl_error($ch);
         } else {
-            echo 'Mail sent successfully!';
+            // Echo-meddelanden i mitten av skärmen
+            echo '<div class="message-container">';
+            echo '<p>Mail skickat!</p>';
             echo '<p>En kod har skickats till din e-postadress. <a href="newPassword.php">Klicka här</a> för att gå vidare och återställa ditt lösenord.</p>';
+            echo '</div>';
         }
 
         curl_close($ch);
     } else {
-        echo 'E-postadressen finns inte i användartabellen.';
+        // Echo-meddelande i mitten av skärmen
+        echo '<div class="message-container">';
+        echo '<p>E-postadressen finns inte i användartabellen.</p>';
+        echo '</div>';
     }
 }
 
-function emailExistsInDatabase($email) {
+function emailExistsInDatabase($email)
+{
     $mysqli = connectToDatabase();
 
     $query = "SELECT COUNT(*) AS count FROM users WHERE email = ?";
@@ -72,7 +79,8 @@ function emailExistsInDatabase($email) {
     return $count > 0;
 }
 
-function getUserIdFromEmail($email) {
+function getUserIdFromEmail($email)
+{
     $mysqli = connectToDatabase();
 
     $query = "SELECT id FROM users WHERE email = ?";
@@ -89,7 +97,8 @@ function getUserIdFromEmail($email) {
     return $user_id;
 }
 
-function saveResetCodeToDatabase($email, $code) {
+function saveResetCodeToDatabase($email, $code)
+{
     $user_id = getUserIdFromEmail($email);
     $mysqli = connectToDatabase();
 
@@ -106,7 +115,8 @@ function saveResetCodeToDatabase($email, $code) {
     $mysqli->close();
 }
 
-function generateRandomCode($length) {
+function generateRandomCode($length)
+{
     $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
     $randomCode = '';
     $max = strlen($characters) - 1;
@@ -119,19 +129,26 @@ function generateRandomCode($length) {
 
 <!DOCTYPE html>
 <html lang="sv">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Skicka kod via e-post</title>
 </head>
+
 <body>
-    <h2>Ange din e-postadress för att få en kod</h2>
-    <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
-        <label for="email">E-postadress:</label>
-        <input type="email" id="email" name="email" required>
-        <button type="submit">Skicka kod</button>
-    </form>
+
+    <div class="formContainer">
+
+        <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
+            <h2>Ange din e-postadress för att få en kod</h2>
+            <label for="email">E-postadress:</label>
+            <input type="email" id="email" name="email" required>
+            <button type="submit">Skicka kod</button>
+        </form>
+    </div>
 </body>
+
 </html>
 
 <footer>

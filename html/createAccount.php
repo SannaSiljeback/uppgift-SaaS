@@ -122,41 +122,43 @@ function createNewsletter($userId, $email)
 </head>
 
 <body>
-    <h2>Create User</h2>
-    <?php if (isset($error_message)) { ?>
-        <p style="color: red;"><?php echo $error_message; ?></p>
-    <?php } ?>
-    <?php if (isset($success_message)) { ?>
-        <p style="color: green;"><?php echo $success_message; ?></p>
-    <?php } ?>
-    <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
-        <div>
-            <label for="email">Email:</label>
-            <input type="email" id="email" name="email" required>
-        </div>
-        <div>
-            <label for="password">Password:</label>
-            <input type="password" id="password" name="password" required>
-        </div>
-        <div>
-            <label for="firstName">First Name:</label>
-            <input type="text" id="firstName" name="firstName" required>
-        </div>
-        <div>
-            <label for="lastName">Last Name:</label>
-            <input type="text" id="lastName" name="lastName" required>
-        </div>
-        <div>
-            <label for="role">Role:</label>
-            <select id="role" name="role">
-                <option value="customer">Customer</option>
-                <option value="subscriber">Subscriber</option>
-            </select>
-        </div>
-        <div>
-            <button type="submit">Create User</button>
-        </div>
-    </form>
+    <div class="formContainer">
+        <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
+            <h2>Create User</h2>
+            <?php if (isset($error_message)) { ?>
+                <p style="color: red;"><?php echo $error_message; ?></p>
+            <?php } ?>
+            <?php if (isset($success_message)) { ?>
+                <p style="color: green;"><?php echo $success_message; ?></p>
+            <?php } ?>
+            <div>
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" required>
+            </div>
+            <div>
+                <label for="password">Password:</label>
+                <input type="password" id="password" name="password" required>
+            </div>
+            <div>
+                <label for="firstName">First Name:</label>
+                <input type="text" id="firstName" name="firstName" required>
+            </div>
+            <div>
+                <label for="lastName">Last Name:</label>
+                <input type="text" id="lastName" name="lastName" required>
+            </div>
+            <div>
+                <label for="role">Role:</label>
+                <select id="role" name="role">
+                    <option value="customer">Customer</option>
+                    <option value="subscriber">Subscriber</option>
+                </select>
+            </div>
+            <div>
+                <button type="submit">Create User</button>
+            </div>
+        </form>
+    </div>
 </body>
 
 </html>

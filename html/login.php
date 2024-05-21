@@ -76,28 +76,30 @@ function verifyLogin($username, $password)
 
 <body>
 
-    <h2>Inloggning</h2>
+    <div class="container">
+        <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
+            <h2>Inloggning</h2>
 
-    <?php if (isset($error_message)) { ?>
-        <p style="color: red;"><?php echo $error_message; ?></p>
-    <?php } ?>
+            <?php if (isset($error_message)) { ?>
+                <p style="color: red;"><?php echo $error_message; ?></p>
+            <?php } ?>
 
-    <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
-        <div>
-            <label for="username">Användarnamn:</label>
-            <input type="text" id="username" name="username">
-        </div>
-        <div>
-            <label for="password">Lösenord:</label>
-            <input type="password" id="password" name="password">
-        </div>
-        <div>
-            <button type="submit">Logga in</button>
-        </div>
-        <div>
-            <a href="resetPassword.php">Glömt lösenord?</a>
-        </div>
-    </form>
+            <div>
+                <label for="username">Användarnamn:</label>
+                <input type="text" id="username" name="username">
+            </div>
+            <div>
+                <label for="password">Lösenord:</label>
+                <input type="password" id="password" name="password">
+            </div>
+            <div>
+                <button type="submit">Logga in</button>
+            </div>
+            <div>
+                <a href="resetPassword.php">Glömt lösenord?</a>
+            </div>
+        </form>
+    </div>
 
 </body>
 

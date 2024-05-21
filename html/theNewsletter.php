@@ -28,6 +28,7 @@ foreach ($newsletters as $newsletter) {
     }
 
     echo "<li>";
+    echo "<form method='post' action='" . htmlspecialchars($_SERVER["PHP_SELF"]) . "'>";
     echo "<h3>{$newsletter['title']}</h3>";
     echo "<p>{$newsletter['description']}</p>";
 
@@ -35,26 +36,17 @@ foreach ($newsletters as $newsletter) {
         $is_subscriber = checkSubscriberStatus($_SESSION['user_id'], $newsletter['id']);
 
         if ($is_subscriber) {
-?>
-            <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
-                <input type="hidden" name="newsletter_id" value="<?php echo $newsletter['id']; ?>">
-                <button type="submit" name="action" value="unsubscribe">Avsluta prenumeration</button>
-            </form>
-        <?php
+            echo "<input type='hidden' name='newsletter_id' value='{$newsletter['id']}'>";
+            echo "<button type='submit' name='action' value='unsubscribe'>Avsluta prenumeration</button>";
         } else {
-        ?>
-            <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
-                <input type="hidden" name="newsletter_id" value="<?php echo $newsletter['id']; ?>">
-                <button type="submit" name="action" value="subscribe">Prenumerera</button>
-            </form>
-        <?php
+            echo "<input type='hidden' name='newsletter_id' value='{$newsletter['id']}'>";
+            echo "<button type='submit' name='action' value='subscribe'>Prenumerera</button>";
         }
     } else {
-        ?>
-        <a href="login.php">Logga in för att prenumerera</a>
-<?php
+        echo "<a href='login.php'>Logga in för att prenumerera</a>";
     }
 
+    echo "</form>";
     echo "</li>";
 }
 echo "</ul>";
