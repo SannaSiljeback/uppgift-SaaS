@@ -42,7 +42,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['update'])) {
 if ($result->num_rows > 0) {
     while ($row = $result->fetch_assoc()) {
         echo "<h3>" . $row['title'] . "</h3>";
-        echo "<form method='post' action=''>";
+        echo "<form method='post' action='' style='width: 400px;'>";
         echo "<input type='hidden' name='newsletter_id' value='" . $row['id'] . "'>";
         echo "<label for='title'>Title:</label>";
         echo "<input type='text' id='title' name='title' value='" . $row['title'] . "' required>";
