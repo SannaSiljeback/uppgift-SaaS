@@ -161,4 +161,6 @@ function createNewsletter($userId, $email)
 
 </html>
 
-<?php include 'footer.php'; ?>
+<footer>
+    <?php include 'footer.php'; ?>
+</footer>

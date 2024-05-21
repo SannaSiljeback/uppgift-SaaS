@@ -7,10 +7,40 @@ include_once 'functions.php';
 
 <head>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/water.css@2/out/water.css">
+    <link rel="stylesheet" href="style.css">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Din Webbplats</title>
-    <!-- Länka till CSS-filer, JavaScript-filer, osv. här -->
+    <style>
+        nav ul {
+            list-style-type: none;
+            padding: 0;
+            margin: 0; 
+            display: flex;
+            justify-content: space-around;
+        }
+
+        nav li {
+            margin-right: 20px;
+        }
+
+        nav li:last-child {
+            margin-right: 0; 
+        }
+
+        nav a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        nav a:hover {
+            text-decoration: underline;
+        }
+
+        header {
+            margin-bottom: 45px;
+        }
+    </style>
 </head>
 
 <body>

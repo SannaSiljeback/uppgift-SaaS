@@ -154,5 +154,3 @@ function userExists($mysqli, $user_id)
     $stmt->close();
 }
 ?>
-
-<?php include 'footer.php'; ?>

@@ -25,9 +25,11 @@ while ($row = $result->fetch_assoc()) {
 echo "</ul>";
 
 $mysqli->close();
-
-include 'footer.php';
 ?>
+<footer>
+    <?php include 'footer.php'; ?>
+</footer>
+
 
 <script>
 function showDescription(id) {

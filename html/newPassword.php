@@ -165,6 +165,6 @@ function verifyCode($verification_code, $email) {
 </html>
 
 
-<?php
-include 'footer.php';
-?>
+<footer>
+    <?php include 'footer.php'; ?>
+</footer>

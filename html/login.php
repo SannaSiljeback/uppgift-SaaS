@@ -103,9 +103,9 @@ function verifyLogin($username, $password)
 
 </html>
 
-<?php
-include 'footer.php';
-?>
+<footer>
+    <?php include 'footer.php'; ?>
+</footer>
 
 <?php
 ob_end_flush(); // Skicka buffrad output till webbläsaren

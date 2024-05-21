@@ -134,6 +134,6 @@ function generateRandomCode($length) {
 </body>
 </html>
 
-<?php
-include_once 'footer.php';
-?>
+<footer>
+    <?php include 'footer.php'; ?>
+</footer>
