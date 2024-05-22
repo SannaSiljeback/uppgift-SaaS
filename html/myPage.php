@@ -4,18 +4,20 @@ include 'header.php';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (isset($_SESSION['user_id'])) {
-        $action = $_POST['action'];
-        $newsletter_id = $_POST['newsletter_id'];
-        $user_id = $_SESSION['user_id'];
+        if (isset($_POST['action'])) {
+            $action = $_POST['action'];
+            $newsletter_id = $_POST['newsletter_id'];
+            $user_id = $_SESSION['user_id'];
 
-        handleSubscription($user_id, $newsletter_id, $action);
+            handleSubscription($user_id, $newsletter_id, $action);
+        }
     } else {
         echo "Användaren är inte inloggad.";
     }
 }
 
 if ($_SESSION['user_role'] == 'customer') {
-    ?>
+?>
     <div class="container">
         <div class="welcome">
             <h2>Välkommen till mina sidor, <?php echo $_SESSION['user_firstName']; ?></h2>
@@ -29,10 +31,10 @@ if ($_SESSION['user_role'] == 'customer') {
             </div>
         </div>
     </div>
-    <?php
+<?php
 } elseif ($_SESSION['user_role'] == 'subscriber') {
     $firstName = $_SESSION['user_firstName'];
-    ?>
+?>
 
     <div class="container">
         <div class="welcome">
@@ -48,7 +50,7 @@ if ($_SESSION['user_role'] == 'customer') {
         </div>
     </div>
 
-    <?php
+<?php
 }
 
 

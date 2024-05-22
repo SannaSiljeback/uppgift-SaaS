@@ -16,13 +16,24 @@ include_once 'functions.php';
             background-color: #7CCBB3;
             padding: 10px;
             color: black;
+            height: 40px;
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            
+
         }
+
         nav ul {
             list-style-type: none;
             padding: 0;
-            margin: 0; 
+            margin: 0;
             display: flex;
             justify-content: space-around;
+            width: 100%;
+
+            
         }
 
         nav li {
@@ -30,7 +41,7 @@ include_once 'functions.php';
         }
 
         nav li:last-child {
-            margin-right: 0; 
+            margin-right: 0;
         }
 
         nav a {
@@ -59,11 +70,11 @@ include_once 'functions.php';
             ?>
                 <ul>
                     <li><a href="index.php">Startsidan</a></li>
-                    <?php if ($user_is_subscriber) { 
+                    <?php if ($user_is_subscriber) {
                     ?>
                         <li><a href="myPage.php">Mina sidor</a></li>
                     <?php } ?>
-                    <?php if ($user_is_customer) { 
+                    <?php if ($user_is_customer) {
                     ?>
                         <li><a href="myPage.php">Mina sidor</a></li>
                     <?php } ?>
