@@ -11,7 +11,7 @@ if (basename($_SERVER['PHP_SELF']) != 'index.php') {
         margin: 0 auto;
         width: 80%;
         text-align: center;
-        margin-top: 15px; 
+        margin-top: 15px;
     }
 
     .wrapper ul {
@@ -49,12 +49,12 @@ if (basename($_SERVER['PHP_SELF']) != 'index.php') {
 
 
 <script>
-function showDescription(id) {
-    var descriptionDiv = document.getElementById('description-' + id);
-    if (descriptionDiv.style.display === 'none') {
-        descriptionDiv.style.display = 'block';
-    } else {
-        descriptionDiv.style.display = 'none';
+    function showDescription(id) {
+        var descriptionDiv = document.getElementById('description-' + id);
+        if (descriptionDiv.style.display === 'none') {
+            descriptionDiv.style.display = 'block';
+        } else {
+            descriptionDiv.style.display = 'none';
+        }
     }
-}
 </script>
