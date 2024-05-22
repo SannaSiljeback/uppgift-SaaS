@@ -2,7 +2,6 @@
 include_once 'functions.php';
 include 'header.php';
 
-// Din if-sats för hantering av formulärdata
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $email = $_POST['email'];
     $current_password = $_POST['current_password'];
@@ -10,8 +9,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $confirm_password = $_POST['confirm_password'];
     $verification_code = $_POST['verification_code'];
 
-    $error_message = ''; // Initiera felmeddelande
-    $success_message = ''; // Initiera framgångsmeddelande
+    $error_message = '';
+    $success_message = '';
 
     if ($new_password !== $confirm_password) {
         $error_message = "New password and confirm password do not match.";
