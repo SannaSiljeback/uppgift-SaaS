@@ -124,7 +124,7 @@ function createNewsletter($userId, $email)
 <body>
     <div class="formContainer">
         <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
-            <h2>Create User</h2>
+            <h2>Skapa konto</h2>
             <?php if (isset($error_message)) { ?>
                 <p style="color: red;"><?php echo $error_message; ?></p>
             <?php } ?>
@@ -136,26 +136,26 @@ function createNewsletter($userId, $email)
                 <input type="email" id="email" name="email" style="background-color: #FBF4EF;" required>
             </div>
             <div>
-                <label for="password">Password:</label>
+                <label for="password">Lösenord:</label>
                 <input type="password" id="password" name="password" style="background-color: #FBF4EF;" required>
             </div>
             <div>
-                <label for="firstName">First Name:</label>
+                <label for="firstName">Förnamn:</label>
                 <input type="text" id="firstName" name="firstName" style="background-color: #FBF4EF;" required>
             </div>
             <div>
-                <label for="lastName">Last Name:</label>
+                <label for="lastName">Efternamn:</label>
                 <input type="text" id="lastName" name="lastName" style="background-color: #FBF4EF;" required>
             </div>
             <div>
-                <label for="role">Role:</label>
+                <label for="role">Roll:</label>
                 <select id="role" name="role" style="background-color: #FBF4EF;">
-                    <option value="customer">Customer</option>
-                    <option value="subscriber">Subscriber</option>
+                    <option value="customer">Kund</option>
+                    <option value="subscriber">Prenumerant</option>
                 </select>
             </div>
             <div>
-                <button type="submit" style="background-color: #FBF4EF;">Create User</button>
+                <button type="submit" style="background-color: #FBF4EF;">Skapa konto</button>
             </div>
         </form>
     </div>
